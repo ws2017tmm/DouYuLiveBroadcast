@@ -25,6 +25,7 @@
 		64ED095C21F169C900A5C610 /* DYDiscveryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095B21F169C900A5C610 /* DYDiscveryController.swift */; };
 		64ED095E21F1749700A5C610 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095D21F1749600A5C610 /* UIView+Extension.swift */; };
 		64ED096021F1828C00A5C610 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095F21F1828C00A5C610 /* UIImageView+Extension.swift */; };
+		64ED096321F1AE0500A5C610 /* DYConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED096221F1AE0500A5C610 /* DYConst.swift */; };
 		F7F63224BAEA4D6BAA898CD6 /* Pods_DouYuZB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 549A3A7FCED4AED0E6EAAD10 /* Pods_DouYuZB.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		64ED095B21F169C900A5C610 /* DYDiscveryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYDiscveryController.swift; sourceTree = "<group>"; };
 		64ED095D21F1749600A5C610 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		64ED095F21F1828C00A5C610 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		64ED096221F1AE0500A5C610 /* DYConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYConst.swift; sourceTree = "<group>"; };
 		7A2335D7AAECB6C87A123287 /* Pods-DouYuZB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouYuZB.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DouYuZB/Pods-DouYuZB.debug.xcconfig"; sourceTree = "<group>"; };
 		EB448D833977C9C54FB77EFC /* Pods-DouYuZB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouYuZB.release.xcconfig"; path = "Pods/Target Support Files/Pods-DouYuZB/Pods-DouYuZB.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -289,6 +291,7 @@
 		64ED093B21F05D1900A5C610 /* Public(公用的) */ = {
 			isa = PBXGroup;
 			children = (
+				64ED096121F1ADDE00A5C610 /* Const */,
 				64ED093C21F05D1900A5C610 /* Tools */,
 				64ED093D21F05D1900A5C610 /* Extensions */,
 			);
@@ -356,6 +359,14 @@
 				64ED094621F05DF800A5C610 /* gif_tabYule.gif */,
 			);
 			path = tabBar;
+			sourceTree = "<group>";
+		};
+		64ED096121F1ADDE00A5C610 /* Const */ = {
+			isa = PBXGroup;
+			children = (
+				64ED096221F1AE0500A5C610 /* DYConst.swift */,
+			);
+			path = Const;
 			sourceTree = "<group>";
 		};
 		F594D47B5D0F52EC16875F19 /* Pods */ = {
@@ -506,6 +517,7 @@
 				64ED094E21F0608700A5C610 /* DYTabBarController.swift in Sources */,
 				64ED095C21F169C900A5C610 /* DYDiscveryController.swift in Sources */,
 				641EC1DC21D3921800EB3832 /* AppDelegate.swift in Sources */,
+				64ED096321F1AE0500A5C610 /* DYConst.swift in Sources */,
 				64ED095A21F169AC00A5C610 /* DYYuBaController.swift in Sources */,
 				64ED095221F0773D00A5C610 /* DYTabBar.swift in Sources */,
 				64ED095621F1694F00A5C610 /* DYEntertainmentController.swift in Sources */,

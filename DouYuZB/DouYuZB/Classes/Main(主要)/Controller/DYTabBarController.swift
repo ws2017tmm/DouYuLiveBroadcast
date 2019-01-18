@@ -17,6 +17,8 @@ class DYTabBarController: UITabBarController {
         return list
     }()
     
+    /// 当前的索引
+    var currentIndex = 0;
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,16 +27,13 @@ class DYTabBarController: UITabBarController {
         tabBar.barTintColor = UIColor.white
 //        tabBar.shadowImage = UIImage()
         tabBar.backgroundImage = UIImage()
-//        let tabBar = DYTabBar()
-//        self.setValue(tabBar, forKeyPath: "tabBar")
-//
-//        self.children
         
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        // 给tabBarItem额外添加点击事件
         guard let btnClass = NSClassFromString("UITabBarButton") else { return }
         
         for view in tabBar.subviews {
@@ -48,7 +47,13 @@ class DYTabBarController: UITabBarController {
         }
     }
     
+    // tabBarItem的点击
     @objc func tabBarButtonClick(_ tabBarButton: UIControl) {
+    
+        // 当前点击同一个item
+        if currentIndex == selectedIndex {
+            return
+        }
         guard let swappableClass = NSClassFromString("UITabBarSwappableImageView") else { return }
         
         for view in tabBarButton.subviews {
@@ -66,32 +71,19 @@ class DYTabBarController: UITabBarController {
         }
     }
     
-    
+    // MARK: - tabBar 代理
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let index = tabBar.items?.firstIndex(of: item) else {
             return
         }
+        // 记录当前index
+        currentIndex = selectedIndex
         
-        item.selectedImage = UIImage(named: "123")?.withRenderingMode(.alwaysOriginal)
-        
+        // 当前点击相同的item
+        if index == selectedIndex {
+            NotificationCenter.default.post(name: NSNotification.Name(DYTabBarButtonDidRepeatClickNotification), object: nil)
+        }
     }
     
-    
-//    func gifImage(_ imageName: String) -> UIImage {
-//        let str = Bundle.main.path(forResource: imageName, ofType: "gif")
-//
-//        let url = URL(fileURLWithPath: str!)
-//
-//
-//        do {
-//            let imageData = try Data(contentsOf: url)
-//            let image = UIImage.sd_animatedGIF(with: imageData)
-//            return image!
-//        } catch {
-//            print(error)
-//        }
-//
-//        return UIImage(named: imageName)!
-//    }
 
 }
