@@ -15,9 +15,21 @@
 		64ED094A21F05DF800A5C610 /* gif_tabLive.gif in Resources */ = {isa = PBXBuildFile; fileRef = 64ED094521F05DF800A5C610 /* gif_tabLive.gif */; };
 		64ED094B21F05DF800A5C610 /* gif_tabYule.gif in Resources */ = {isa = PBXBuildFile; fileRef = 64ED094621F05DF800A5C610 /* gif_tabYule.gif */; };
 		64ED094C21F05DF800A5C610 /* gif_tabFocus.gif in Resources */ = {isa = PBXBuildFile; fileRef = 64ED094721F05DF800A5C610 /* gif_tabFocus.gif */; };
+		64ED094E21F0608700A5C610 /* DYTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED094D21F0608700A5C610 /* DYTabBarController.swift */; };
+		64ED095021F060AD00A5C610 /* DYNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED094F21F060AD00A5C610 /* DYNavigationController.swift */; };
+		64ED095221F0773D00A5C610 /* DYTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095121F0773D00A5C610 /* DYTabBar.swift */; };
+		64ED095421F1691B00A5C610 /* DYRecommendController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095321F1691B00A5C610 /* DYRecommendController.swift */; };
+		64ED095621F1694F00A5C610 /* DYEntertainmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095521F1694F00A5C610 /* DYEntertainmentController.swift */; };
+		64ED095821F1697D00A5C610 /* DYFollowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095721F1697D00A5C610 /* DYFollowController.swift */; };
+		64ED095A21F169AC00A5C610 /* DYYuBaController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095921F169AC00A5C610 /* DYYuBaController.swift */; };
+		64ED095C21F169C900A5C610 /* DYDiscveryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095B21F169C900A5C610 /* DYDiscveryController.swift */; };
+		64ED095E21F1749700A5C610 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095D21F1749600A5C610 /* UIView+Extension.swift */; };
+		64ED096021F1828C00A5C610 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ED095F21F1828C00A5C610 /* UIImageView+Extension.swift */; };
+		F7F63224BAEA4D6BAA898CD6 /* Pods_DouYuZB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 549A3A7FCED4AED0E6EAAD10 /* Pods_DouYuZB.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		549A3A7FCED4AED0E6EAAD10 /* Pods_DouYuZB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DouYuZB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		641EC1D821D3921800EB3832 /* DouYuZB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DouYuZB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		641EC1DB21D3921800EB3832 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		641EC1E021D3921800EB3832 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -28,6 +40,18 @@
 		64ED094521F05DF800A5C610 /* gif_tabLive.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gif_tabLive.gif; sourceTree = "<group>"; };
 		64ED094621F05DF800A5C610 /* gif_tabYule.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gif_tabYule.gif; sourceTree = "<group>"; };
 		64ED094721F05DF800A5C610 /* gif_tabFocus.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gif_tabFocus.gif; sourceTree = "<group>"; };
+		64ED094D21F0608700A5C610 /* DYTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYTabBarController.swift; sourceTree = "<group>"; };
+		64ED094F21F060AD00A5C610 /* DYNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYNavigationController.swift; sourceTree = "<group>"; };
+		64ED095121F0773D00A5C610 /* DYTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYTabBar.swift; sourceTree = "<group>"; };
+		64ED095321F1691B00A5C610 /* DYRecommendController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYRecommendController.swift; sourceTree = "<group>"; };
+		64ED095521F1694F00A5C610 /* DYEntertainmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYEntertainmentController.swift; sourceTree = "<group>"; };
+		64ED095721F1697D00A5C610 /* DYFollowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYFollowController.swift; sourceTree = "<group>"; };
+		64ED095921F169AC00A5C610 /* DYYuBaController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYYuBaController.swift; sourceTree = "<group>"; };
+		64ED095B21F169C900A5C610 /* DYDiscveryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYDiscveryController.swift; sourceTree = "<group>"; };
+		64ED095D21F1749600A5C610 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		64ED095F21F1828C00A5C610 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		7A2335D7AAECB6C87A123287 /* Pods-DouYuZB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouYuZB.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DouYuZB/Pods-DouYuZB.debug.xcconfig"; sourceTree = "<group>"; };
+		EB448D833977C9C54FB77EFC /* Pods-DouYuZB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouYuZB.release.xcconfig"; path = "Pods/Target Support Files/Pods-DouYuZB/Pods-DouYuZB.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7F63224BAEA4D6BAA898CD6 /* Pods_DouYuZB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +71,8 @@
 			children = (
 				641EC1DA21D3921800EB3832 /* DouYuZB */,
 				641EC1D921D3921800EB3832 /* Products */,
+				F594D47B5D0F52EC16875F19 /* Pods */,
+				FC19AAA3312197955D864E99 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,12 +99,12 @@
 			children = (
 				641EC1DB21D3921800EB3832 /* AppDelegate.swift */,
 				64ED093E21F05D4400A5C610 /* Main(主要) */,
-				64ED093B21F05D1900A5C610 /* Public(公用的) */,
-				64ED092021F05C0800A5C610 /* Follow(关注) */,
 				64ED092421F05C0800A5C610 /* Recommend(推荐) */,
 				64ED092821F05C0800A5C610 /* Entertainment(娱乐) */,
+				64ED092021F05C0800A5C610 /* Follow(关注) */,
 				64ED092C21F05C0800A5C610 /* Yuba(鱼吧) */,
 				64ED093021F05C0800A5C610 /* Discover(发现) */,
+				64ED093B21F05D1900A5C610 /* Public(公用的) */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -95,6 +122,7 @@
 		64ED092121F05C0800A5C610 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				64ED095721F1697D00A5C610 /* DYFollowController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -126,6 +154,7 @@
 		64ED092521F05C0800A5C610 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				64ED095321F1691B00A5C610 /* DYRecommendController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -157,6 +186,7 @@
 		64ED092921F05C0800A5C610 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				64ED095521F1694F00A5C610 /* DYEntertainmentController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -188,6 +218,7 @@
 		64ED092D21F05C0800A5C610 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				64ED095921F169AC00A5C610 /* DYYuBaController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -219,6 +250,7 @@
 		64ED093121F05C0800A5C610 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				64ED095B21F169C900A5C610 /* DYDiscveryController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -273,6 +305,8 @@
 		64ED093D21F05D1900A5C610 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				64ED095D21F1749600A5C610 /* UIView+Extension.swift */,
+				64ED095F21F1828C00A5C610 /* UIImageView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -291,6 +325,8 @@
 			isa = PBXGroup;
 			children = (
 				641EC1DF21D3921800EB3832 /* Main.storyboard */,
+				64ED094D21F0608700A5C610 /* DYTabBarController.swift */,
+				64ED094F21F060AD00A5C610 /* DYNavigationController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -305,6 +341,7 @@
 		64ED094121F05D4400A5C610 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				64ED095121F0773D00A5C610 /* DYTabBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -321,6 +358,23 @@
 			path = tabBar;
 			sourceTree = "<group>";
 		};
+		F594D47B5D0F52EC16875F19 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7A2335D7AAECB6C87A123287 /* Pods-DouYuZB.debug.xcconfig */,
+				EB448D833977C9C54FB77EFC /* Pods-DouYuZB.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		FC19AAA3312197955D864E99 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				549A3A7FCED4AED0E6EAAD10 /* Pods_DouYuZB.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -328,9 +382,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 641EC1EA21D3921900EB3832 /* Build configuration list for PBXNativeTarget "DouYuZB" */;
 			buildPhases = (
+				38F10F07E21125CC93D6B5D5 /* [CP] Check Pods Manifest.lock */,
 				641EC1D421D3921800EB3832 /* Sources */,
 				641EC1D521D3921800EB3832 /* Frameworks */,
 				641EC1D621D3921800EB3832 /* Resources */,
+				AADD65301DC3518757A622EF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -347,6 +403,7 @@
 		641EC1D021D3921800EB3832 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = DY;
 				LastSwiftUpdateCheck = 1000;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = StevenWu;
@@ -391,12 +448,71 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		38F10F07E21125CC93D6B5D5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DouYuZB-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AADD65301DC3518757A622EF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-DouYuZB/Pods-DouYuZB-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DouYuZB/Pods-DouYuZB-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		641EC1D421D3921800EB3832 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64ED095821F1697D00A5C610 /* DYFollowController.swift in Sources */,
+				64ED094E21F0608700A5C610 /* DYTabBarController.swift in Sources */,
+				64ED095C21F169C900A5C610 /* DYDiscveryController.swift in Sources */,
 				641EC1DC21D3921800EB3832 /* AppDelegate.swift in Sources */,
+				64ED095A21F169AC00A5C610 /* DYYuBaController.swift in Sources */,
+				64ED095221F0773D00A5C610 /* DYTabBar.swift in Sources */,
+				64ED095621F1694F00A5C610 /* DYEntertainmentController.swift in Sources */,
+				64ED096021F1828C00A5C610 /* UIImageView+Extension.swift in Sources */,
+				64ED095021F060AD00A5C610 /* DYNavigationController.swift in Sources */,
+				64ED095E21F1749700A5C610 /* UIView+Extension.swift in Sources */,
+				64ED095421F1691B00A5C610 /* DYRecommendController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +648,7 @@
 		};
 		641EC1EB21D3921900EB3832 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A2335D7AAECB6C87A123287 /* Pods-DouYuZB.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -551,6 +668,7 @@
 		};
 		641EC1EC21D3921900EB3832 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB448D833977C9C54FB77EFC /* Pods-DouYuZB.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
