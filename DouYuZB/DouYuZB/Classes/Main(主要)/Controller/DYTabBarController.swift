@@ -2,7 +2,7 @@
 //  DYTabBarController.swift
 //  DouYuZB
 //
-//  Created by 李响 on 2019/1/17.
+//  Created by StevenWu on 2019/1/17.
 //  Copyright © 2019 StevenWu. All rights reserved.
 //
 
@@ -27,6 +27,7 @@ class DYTabBarController: UITabBarController {
         tabBar.barTintColor = UIColor.white
 //        tabBar.shadowImage = UIImage()
         tabBar.backgroundImage = UIImage()
+        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor.black], for: .normal)
         
     }
     
@@ -39,7 +40,6 @@ class DYTabBarController: UITabBarController {
         for view in tabBar.subviews {
             if view.classForCoder == btnClass {
                 if let control = view as? UIControl {
-                    debugPrint(control)
                     control.removeTarget(self, action: #selector(self.tabBarButtonClick(_:)), for: .touchUpInside)
                     control.addTarget(self, action: #selector(self.tabBarButtonClick(_:)), for: .touchUpInside)
                 }

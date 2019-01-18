@@ -2,13 +2,13 @@
 //  DYFollowController.swift
 //  DouYuZB
 //
-//  Created by 李响 on 2019/1/18.
+//  Created by StevenWu on 2019/1/18.
 //  Copyright © 2019 StevenWu. All rights reserved.
 //
 
 import UIKit
 
-class DYFollowController: UIViewController {
+class DYFollowController: DYBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

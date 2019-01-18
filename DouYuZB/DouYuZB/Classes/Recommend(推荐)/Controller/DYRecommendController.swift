@@ -2,13 +2,13 @@
 //  DYRecommendController.swift
 //  DouYuZB
 //
-//  Created by 李响 on 2019/1/18.
+//  Created by StevenWu on 2019/1/18.
 //  Copyright © 2019 StevenWu. All rights reserved.
 //
 
 import UIKit
 
-class DYRecommendController: UIViewController {
+class DYRecommendController: DYBaseViewController {
 
     
     
@@ -24,12 +24,17 @@ extension DYRecommendController {
         super.viewDidLoad()
         
         title = "推荐"
+        
         // Do any additional setup after loading the view.
+        navigationItem.leftBarButtonItem = UIBarButtonItem.eyeFish(target: self, action: #selector(eyeFishClick))
         
-        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(imageName: "cm_nav_history", highImageName: "cm_nav_history", size: CGSize(width: 23, height: 23), target: self, action: #selector(eyeFishClick))
         
     }
     
+    @objc func eyeFishClick() {
+        debugPrint("eyeFishClick")
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

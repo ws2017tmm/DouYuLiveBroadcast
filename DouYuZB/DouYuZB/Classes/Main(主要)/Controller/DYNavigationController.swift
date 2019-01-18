@@ -2,7 +2,7 @@
 //  DYNavigationController.swift
 //  DouYuZB
 //
-//  Created by 李响 on 2019/1/17.
+//  Created by StevenWu on 2019/1/17.
 //  Copyright © 2019 StevenWu. All rights reserved.
 //
 
@@ -12,19 +12,14 @@ class DYNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        navigationBar.shadowImage = UIImage()
+        navigationBar.setBackgroundImage(UIImage.image(UIColor(r: 253, g: 129, b: 82)), for: .default)
+        
+        
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
+
+
