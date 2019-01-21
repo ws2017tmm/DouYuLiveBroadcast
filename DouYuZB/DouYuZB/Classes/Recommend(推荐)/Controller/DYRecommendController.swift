@@ -50,7 +50,7 @@ extension DYRecommendController {
 // MARK: - 设置UI
 extension DYRecommendController {
     func setupUI() {
-        title = "推荐"
+//        title = "推荐"
     }
     
 }

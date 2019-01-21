@@ -82,10 +82,13 @@ class DYTabBarController: UITabBarController {
             return
         }
         
+        
         // 切换tabBar时候,停止动画
         if currentIndex != selectedIndex {
-            self.gifImageView?.stopAnimating()
-            self.gifImageView?.removeFromSuperview()
+            if gifImageView != nil {
+                gifImageView?.stopAnimating()
+                gifImageView?.removeFromSuperview()
+            }
         }
         
         // 记录当前index

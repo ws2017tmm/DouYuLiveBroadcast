@@ -7,7 +7,29 @@
 //
 
 import Foundation
+import UIKit
 
-
+// MARK: - 通知
 let DYTabBarButtonDidRepeatClickNotification = "DYTabBarButtonDidRepeatClickNotification"
+
+
+// MARK: - 常量
+/// 屏幕宽度
+let kScreenWidth = UIScreen.main.bounds.size.width
+/// 屏幕高度
+let kScreenHeight = UIScreen.main.bounds.size.height
+/// statusBar的高度(20和44)
+let kStatusbarHeight = UIApplication.shared.statusBarFrame.height
+
+/// 导航栏left\rightItem的间距
+var kNavItemEdgeMargin: CGFloat {
+    get {
+        if kScreenWidth >= 414 {
+            return 20.0
+        } else {
+            return 16.0
+        }
+    }
+}
+
 
