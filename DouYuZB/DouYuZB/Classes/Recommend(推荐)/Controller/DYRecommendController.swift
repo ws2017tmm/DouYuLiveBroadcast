@@ -8,6 +8,7 @@
 
 import UIKit
 
+// MARK: - 控制器属性
 class DYRecommendController: DYBaseViewController {
 
     
@@ -23,18 +24,13 @@ extension DYRecommendController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "推荐"
+        setupUI()
         
-        // Do any additional setup after loading the view.
-        navigationItem.leftBarButtonItem = UIBarButtonItem.eyeFish(target: self, action: #selector(eyeFishClick))
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(imageName: "cm_nav_history", highImageName: "cm_nav_history", size: CGSize(width: 23, height: 23), target: self, action: #selector(eyeFishClick))
         
     }
     
-    @objc func eyeFishClick() {
-        debugPrint("eyeFishClick")
-    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -51,6 +47,13 @@ extension DYRecommendController {
     
 }
 
+// MARK: - 设置UI
+extension DYRecommendController {
+    func setupUI() {
+        title = "推荐"
+    }
+    
+}
 
 
 // MARK: - 通知事件处理
@@ -59,3 +62,5 @@ extension DYRecommendController {
         debugPrint("dropdownRefresh")
     }
 }
+
+
