@@ -38,6 +38,14 @@ class DYSearchBar: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    /// 快速创建searchBar
+    ///
+    /// - Parameters:
+    ///   - searchIconPosition: 🔍图标的位置(只支持靠左和居中)
+    ///   - corner: 是否是圆角(默认是圆角)
+    ///   - imageName: 右边是否有图标(默认没有)
+    ///   - frame: 搜索框的frame
     convenience init(position searchIconPosition : DYSearchBarIconPosition = .left, corner: Bool = true, rightImage imageName: String? = nil, frame: CGRect) {
         self.init(frame: frame)
         

@@ -8,20 +8,23 @@
 
 import UIKit
 
-let kNavItemMargin = kNavItemEdgeMargin + 5
+private let kNavItemMargin = sx_defultFixSpace + 5
 
 
 // MARK: - base 的属性
 class DYBaseViewController: UIViewController {
     
+    /// 搜索框
     lazy var searchBar: DYSearchBar = {
-        let x = kNavItemEdgeMargin + (navigationItem.leftBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
-        let rightItemW = kNavItemEdgeMargin + (navigationItem.rightBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
+        let height: CGFloat = 30.0
+        let x = sx_defultFixSpace + (navigationItem.leftBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
+        let y = ((navigationController?.navigationBar.height ?? 44) - height) * 0.5
+        let rightItemW = sx_defultFixSpace + (navigationItem.rightBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
         let width = kScreenWidth - x - rightItemW
-        let frame = CGRect(x: x, y: 0, width: width, height: 30)
+        let frame = CGRect(x: x, y: y, width: width, height: height)
         
-//        let searchBar = DYSearchBar.searchBar(rightImage: "cm_nav_richscan", frame: frame)
         let searchBar = DYSearchBar(rightImage: "cm_nav_richscan", frame: frame)
+//        searchBar.centerX = kScreenWidth * 0.5 + 10
         searchBar.myDelegate = self
         
         return searchBar
@@ -57,17 +60,16 @@ extension DYBaseViewController {
     
     /// 设置导航栏
     private func setupNav() {
+        
         // 左边
         navigationItem.leftBarButtonItem = UIBarButtonItem.eyeFish(target: self, action: #selector(eyeFishClick))
-//        navigationController?.navigationBar.addSubview(<#T##view: UIView##UIView#>)
-        
         
         // 右边
         navigationItem.rightBarButtonItem = UIBarButtonItem(imageName: "cm_nav_history", highImageName: "cm_nav_history", target: self, action: #selector(watchingHistory))
         
         // 中间
-        navigationItem.titleView = searchBar
-        
+//        navigationItem.titleView = searchBar
+        navigationController?.navigationBar.addSubview(searchBar)
     }
     
 }

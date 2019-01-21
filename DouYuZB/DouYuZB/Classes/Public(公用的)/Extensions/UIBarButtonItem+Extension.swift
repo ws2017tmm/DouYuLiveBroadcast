@@ -12,16 +12,22 @@ import UIKit
 extension UIBarButtonItem {
     
     // 便利构造函数: 1> convenience开头 2> 在构造函数中必须明确调用一个设计的构造函数(self)
-    convenience init(imageName : String, highImageName : String = "", size : CGSize = CGSize.zero, target: Any?, action: Selector)  {
+    convenience init(imageName : String,
+                     highImageName : String = "",
+                     size : CGSize = .zero,
+                     target: Any?,
+                     action: Selector)  {
         // 1.创建UIButton
         let btn = UIButton()
-        btn.addTarget(target, action: action, for: .touchUpInside)
+        
         // 2.设置btn的图片
         btn.setImage(UIImage(named: imageName), for: .normal)
         if highImageName != "" {
             btn.setImage(UIImage(named: highImageName), for: .highlighted)
         }
-        
+        if target != nil {
+            btn.addTarget(target, action: action, for: .touchUpInside)
+        }
         // 3.设置btn的尺寸
         if size == CGSize.zero {
             btn.sizeToFit()
@@ -31,6 +37,31 @@ extension UIBarButtonItem {
         
         // 4.创建UIBarButtonItem
         self.init(customView : btn)
+    }
+    
+    convenience init(title: String?,
+                     titleColor: UIColor = .white,
+                     titleFont: UIFont = UIFont.systemFont(ofSize: 15),
+                     titleEdgeInsets: UIEdgeInsets = .zero,
+                     size: CGSize = .zero,
+                     target: Any?,
+                     action: Selector) {
+        
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(titleColor, for: .normal)
+        button.titleLabel?.font = titleFont
+        button.titleEdgeInsets = titleEdgeInsets
+        if target != nil {
+            button.addTarget(target, action: action, for: .touchUpInside)
+        }
+        if size == .zero {
+            button.sizeToFit()
+        } else {
+            button.frame = CGRect(origin: CGPoint.zero, size: size)
+        }
+        
+        self.init(customView: button)
     }
     
     /// 左边眨眼睛的logo
