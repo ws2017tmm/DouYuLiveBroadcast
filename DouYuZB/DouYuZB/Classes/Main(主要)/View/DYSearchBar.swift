@@ -42,7 +42,7 @@ class DYSearchBar: UITextField {
         self.init(frame: frame)
         
         // 创建searchBar
-//        let searchBar = DYSearchBar(frame: frame)
+        self.placeholder = "uzi"
         self.delegate = self
         self.backgroundColor = UIColor.white
         self.searchIconPosition = searchIconPosition
@@ -110,4 +110,14 @@ extension DYSearchBar {
         rect.origin.x = rect.origin.x - 10
         return rect
     }
+    
+    /// 占位文字的位置
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        var rect = super.placeholderRect(forBounds: bounds)
+        if searchIconPosition == .left {
+            rect.origin.x = rect.origin.x + 5
+        }
+        return rect
+    }
+    
 }
