@@ -40,9 +40,11 @@ extension UIBarButtonItem {
         imageView.size = CGSize(width: 40, height: 40)
         imageView.isUserInteractionEnabled = true
         
+        // 添加手势
         let tap = UITapGestureRecognizer(target: target, action: action)
         imageView.addGestureRecognizer(tap)
         
+        // 获取图片数组
         var animationImages = [UIImage]()
         for i in 1...9 {
             let imageName = "image_default_eye" + "\(i)"
@@ -50,13 +52,18 @@ extension UIBarButtonItem {
             guard let image = UIImage(named: imageName) else { continue }
             animationImages.append(image)
         }
-
         
+        //最后一张图片多添加几次，让鱼眨完眼睛，貌似有个停顿的动作
+        for _ in 0...5 {
+            guard let image = UIImage(named: "image_default_eye9") else { continue }
+            animationImages.append(image)
+        }
+        
+        // 让imageView执行动画
         imageView.animationImages = animationImages
         imageView.animationDuration = 0.8
         imageView.animationRepeatCount = 0
         imageView.startAnimating()
-//        imageView.image = UIImage(named: "image_default_eye1")
         
         let item = UIBarButtonItem(customView: imageView)
         return item

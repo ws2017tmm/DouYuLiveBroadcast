@@ -58,9 +58,9 @@ extension UIImageView {
         if finishAnimation == true {
             self.perform(#selector(removeFromSuperview), with: nil, afterDelay: duration)
         }
-        
-        
     }
+    
+    
     
     
 }

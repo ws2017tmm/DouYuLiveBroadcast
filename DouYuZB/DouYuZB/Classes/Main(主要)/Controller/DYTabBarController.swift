@@ -11,6 +11,10 @@ import SDWebImage
 
 class DYTabBarController: UITabBarController {
     
+    /// 切换tabBar时,在tabBarItem上添加一张图片,用于播放动画
+    var gifImageView: UIImageView?
+    
+    
     /// gif图片数组
     lazy var gifImageList: [String] = {
         var list = ["gif_tabLive", "gif_tabYule", "gif_tabFocus", "gif_tabYuba", "gif_tabDiscovery"]
@@ -63,6 +67,7 @@ class DYTabBarController: UITabBarController {
                     let gifImageView = UIImageView()
                     imageView.addSubview(gifImageView)
                     gifImageView.frame = imageView.bounds
+                    self.gifImageView = gifImageView
                     
                     let imageName = gifImageList[selectedIndex]
                     gifImageView.playGIFImage(imageName, isRemove: true)
@@ -76,6 +81,13 @@ class DYTabBarController: UITabBarController {
         guard let index = tabBar.items?.firstIndex(of: item) else {
             return
         }
+        
+        // 切换tabBar时候,停止动画
+        if currentIndex != selectedIndex {
+            self.gifImageView?.stopAnimating()
+            self.gifImageView?.removeFromSuperview()
+        }
+        
         // 记录当前index
         currentIndex = selectedIndex
         
