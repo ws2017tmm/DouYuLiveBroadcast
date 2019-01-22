@@ -2,7 +2,7 @@
 //  DYBaseViewController.swift
 //  DouYuZB
 //
-//  Created by 李响 on 2019/1/18.
+//  Created by StevenWu on 2019/1/18.
 //  Copyright © 2019 StevenWu. All rights reserved.
 //
 
@@ -24,8 +24,10 @@ class DYBaseViewController: UIViewController {
         let frame = CGRect(x: x, y: y, width: width, height: height)
         
         let searchBar = DYSearchBar(rightImage: "cm_nav_richscan", frame: frame)
-//        searchBar.centerX = kScreenWidth * 0.5 + 10
         searchBar.myDelegate = self
+        searchBar.placeholderSize = 17.0
+        searchBar.placeholderColor = .red
+        searchBar.placeholder = "uzi"
         
         return searchBar
     }()
@@ -84,6 +86,10 @@ extension DYBaseViewController {
     /// 观看历史点击
     @objc func watchingHistory() {
         debugPrint("watchingHistory")
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        searchBar.resignFirstResponder()
     }
     
 }

@@ -2,7 +2,7 @@
 //  UIBarButtonItem+FixSpace.swift
 //  DouYuZB
 //
-//  Created by 李响 on 2019/1/21.
+//  Created by StevenWu on 2019/1/21.
 //  Copyright © 2019 StevenWu. All rights reserved.
 //
 
@@ -14,26 +14,19 @@ extension NSObject {
         
         let originalMethod = class_getInstanceMethod(cls, originalSelector)!
         let swizzledMethod = class_getInstanceMethod(cls, swizzleSelector)!
-        let didAddMethod = class_addMethod(cls,
-                                           originalSelector,
-                                           method_getImplementation(swizzledMethod),
-                                           method_getTypeEncoding(swizzledMethod))
+        let didAddMethod = class_addMethod(cls, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
         if didAddMethod {
-            class_replaceMethod(cls,
-                                swizzleSelector,
-                                method_getImplementation(originalMethod),
-                                method_getTypeEncoding(originalMethod))
+            class_replaceMethod(cls, swizzleSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
         } else {
-            method_exchangeImplementations(originalMethod,
-                                           swizzledMethod)
+            method_exchangeImplementations(originalMethod, swizzledMethod)
         }
     }
 }
 
-
 extension UIApplication {
     private static let classSwizzedMethod: Void = {
         UINavigationController.sx_initialize
+        DYSearchBar.sx_initialize
         if #available(iOS 11.0, *) {
             UINavigationBar.sx_initialize
         }
@@ -44,6 +37,7 @@ extension UIApplication {
         return super.next
     }
 }
+
 public var sx_defultFixSpace: CGFloat = 0
 public var sx_disableFixSpace: Bool = false
 
@@ -124,6 +118,7 @@ extension UINavigationController {
         }
     }
 }
+
 @available(iOS 11.0, *)
 extension UINavigationBar {
     

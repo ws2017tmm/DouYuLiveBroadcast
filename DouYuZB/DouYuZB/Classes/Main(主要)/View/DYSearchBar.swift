@@ -2,11 +2,13 @@
 //  DYSearchBar.swift
 //  DouYuZB
 //
-//  Created by 李响 on 2019/1/21.
+//  Created by StevenWu on 2019/1/21.
 //  Copyright © 2019 StevenWu. All rights reserved.
 //  搜索框
 
 import UIKit
+
+let kSpaceBetweenIconAndPlaceholder: CGFloat = 5.0
 
 enum DYSearchBarIconPosition {
     case left
@@ -23,11 +25,55 @@ protocol DYSearchBarDelegate: UITextFieldDelegate {
 
 // MARK: - 快速创建DYSearchBar
 class DYSearchBar: UITextField {
+
+    private struct RuntimeKey {
+        static let placeholderColor = UnsafeRawPointer(bitPattern: "placeholderColor".hashValue)
+        static let placeholderSize = UnsafeRawPointer(bitPattern: "placeholderSize".hashValue)
+    }
     
     /// 代理
     weak var myDelegate: DYSearchBarDelegate?
     /// 搜索图标的位置(靠左还是居中)
     private var searchIconPosition: DYSearchBarIconPosition = .left
+    /// 光标的颜色(默认蓝色)
+    var cursorColor: UIColor = .green {
+        didSet {
+            self.tintColor = cursorColor
+        }
+    }
+    
+    /// 占位文字的大小(默认17) placeholderSize
+    var placeholderSize: CGFloat {
+        set {
+            guard let placeholderSize = RuntimeKey.placeholderSize else {
+                return
+            }
+            objc_setAssociatedObject(self, placeholderSize, newValue, .OBJC_ASSOCIATION_ASSIGN)
+        }
+        get {
+            guard let placeholderSize = RuntimeKey.placeholderSize else {
+                return 17.0
+            }
+            let size = objc_getAssociatedObject(self, placeholderSize) as? CGFloat
+            return size ?? 17.0
+        }
+    }
+    /// 占位文字的颜色(默认灰色)
+    var placeholderColor: UIColor? {
+        set {
+            guard let placeholderColor = RuntimeKey.placeholderColor else {
+                return
+            }
+            objc_setAssociatedObject(self, placeholderColor, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+        get {
+            guard let placeholderColor = RuntimeKey.placeholderColor else {
+                return UIColor(rgb: 161.0)
+            }
+            return objc_getAssociatedObject(self, placeholderColor) as? UIColor
+        }
+    }
+    
     
     // 快速创建searchBar
     override init(frame: CGRect) {
@@ -50,7 +96,7 @@ class DYSearchBar: UITextField {
         self.init(frame: frame)
         
         // 创建searchBar
-        self.placeholder = "uzi"
+//        self.placeholder = "uzi1309r209ru3g"
         self.delegate = self
         self.backgroundColor = UIColor.white
         self.searchIconPosition = searchIconPosition
@@ -107,7 +153,15 @@ extension DYSearchBar {
         if searchIconPosition == .left {
             rect.origin.x = 10
         } else {
-            rect.origin.x = (self.width - rect.size.width) * 0.5
+            // 计算placeholder的文字长度
+            guard let placeholder = placeholder else {
+                rect.origin.x = (self.width - rect.size.width) * 0.5
+                return rect
+            }
+            let placeholderWidth = NSString(string: placeholder).boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: rect.size.height), options: .usesLineFragmentOrigin, attributes: nil, context: nil).size.width
+            
+            rect.origin.x = (self.width - rect.size.width - placeholderWidth) * 0.5 - kSpaceBetweenIconAndPlaceholder
+            
         }
         return rect
     }
@@ -122,10 +176,32 @@ extension DYSearchBar {
     /// 占位文字的位置
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.placeholderRect(forBounds: bounds)
-        if searchIconPosition == .left {
-            rect.origin.x = rect.origin.x + 5
-        }
+        rect.origin.x = rect.origin.x + kSpaceBetweenIconAndPlaceholder
         return rect
     }
     
 }
+
+
+extension DYSearchBar {
+    static let sx_initialize: Void = {
+        DispatchQueue.once(UUID().uuidString) {
+            swizzleMethod(DYSearchBar.self,
+                          originalSelector: #selector(setter: DYSearchBar.placeholder),
+                          swizzleSelector: #selector(DYSearchBar.sx_placeholder))
+        }
+    }()
+    
+    @objc func sx_placeholder() {
+        sx_placeholder()
+        
+        let label = self.value(forKeyPath: "placeholderLabel")
+        guard let placeholderLabel = label as? UILabel  else {
+            return
+        }
+        placeholderLabel.textColor = self.placeholderColor
+        placeholderLabel.font = UIFont.systemFont(ofSize: self.placeholderSize)
+    }
+}
+
+
