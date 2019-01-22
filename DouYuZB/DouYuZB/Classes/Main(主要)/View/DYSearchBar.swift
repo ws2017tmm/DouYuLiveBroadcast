@@ -184,16 +184,16 @@ extension DYSearchBar {
 
 
 extension DYSearchBar {
-    static let sx_initialize: Void = {
+    static let ws_initialize: Void = {
         DispatchQueue.once(UUID().uuidString) {
             swizzleMethod(DYSearchBar.self,
                           originalSelector: #selector(setter: DYSearchBar.placeholder),
-                          swizzleSelector: #selector(DYSearchBar.sx_placeholder))
+                          swizzleSelector: #selector(DYSearchBar.ws_placeholder))
         }
     }()
     
-    @objc func sx_placeholder() {
-        sx_placeholder()
+    @objc func ws_placeholder() {
+        ws_placeholder()
         
         let label = self.value(forKeyPath: "placeholderLabel")
         guard let placeholderLabel = label as? UILabel  else {

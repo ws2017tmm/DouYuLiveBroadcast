@@ -21,7 +21,7 @@ class DYNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sx_defultFixSpace = 10
+        ws_defultFixSpace = 10
         
         // 替换系统的navigationBar
 //        self.setValue(navBar, forKeyPath: "navigationBar")

@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let kNavItemMargin = sx_defultFixSpace + 5
+private let kNavItemMargin = ws_defultFixSpace + 5
 
 
 // MARK: - base 的属性
@@ -17,16 +17,16 @@ class DYBaseViewController: UIViewController {
     /// 搜索框
     lazy var searchBar: DYSearchBar = {
         let height: CGFloat = 30.0
-        let x = sx_defultFixSpace + (navigationItem.leftBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
+        let x = ws_defultFixSpace + (navigationItem.leftBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
         let y = ((navigationController?.navigationBar.height ?? 44) - height) * 0.5
-        let rightItemW = sx_defultFixSpace + (navigationItem.rightBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
+        let rightItemW = ws_defultFixSpace + (navigationItem.rightBarButtonItem?.customView?.width ?? 0) + kNavItemMargin
         let width = kScreenWidth - x - rightItemW
         let frame = CGRect(x: x, y: y, width: width, height: height)
         
         let searchBar = DYSearchBar(rightImage: "cm_nav_richscan", frame: frame)
         searchBar.myDelegate = self
         searchBar.placeholderSize = 17.0
-        searchBar.placeholderColor = .red
+//        searchBar.placeholderColor = .red
         searchBar.placeholder = "uzi"
         
         return searchBar

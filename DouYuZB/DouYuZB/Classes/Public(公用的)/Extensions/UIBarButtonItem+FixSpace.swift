@@ -25,10 +25,10 @@ extension NSObject {
 
 extension UIApplication {
     private static let classSwizzedMethod: Void = {
-        UINavigationController.sx_initialize
-        DYSearchBar.sx_initialize
+        UINavigationController.ws_initialize
+        DYSearchBar.ws_initialize
         if #available(iOS 11.0, *) {
-            UINavigationBar.sx_initialize
+            UINavigationBar.ws_initialize
         }
     }()
     
@@ -38,8 +38,8 @@ extension UIApplication {
     }
 }
 
-public var sx_defultFixSpace: CGFloat = 0
-public var sx_disableFixSpace: Bool = false
+public var ws_defultFixSpace: CGFloat = 0
+public var ws_disableFixSpace: Bool = false
 
 extension UINavigationController {
     
@@ -48,20 +48,20 @@ extension UINavigationController {
         static var tempBehavor = "tempBehavor"
     }
     
-    static let sx_initialize: Void = {
+    static let ws_initialize: Void = {
         DispatchQueue.once(UUID().uuidString) {
             
             swizzleMethod(UINavigationController.self,
                           originalSelector: #selector(UINavigationController.viewDidLoad),
-                          swizzleSelector: #selector(UINavigationController.sx_viewDidLoad))
+                          swizzleSelector: #selector(UINavigationController.ws_viewDidLoad))
             
             swizzleMethod(UINavigationController.self,
                           originalSelector: #selector(UINavigationController.viewWillAppear(_:)),
-                          swizzleSelector: #selector(UINavigationController.sx_viewWillAppear(_:)))
+                          swizzleSelector: #selector(UINavigationController.ws_viewWillAppear(_:)))
             
             swizzleMethod(UINavigationController.self,
                           originalSelector: #selector(UINavigationController.viewWillDisappear(_:)),
-                          swizzleSelector: #selector(UINavigationController.sx_viewWillDisappear(_:)))
+                          swizzleSelector: #selector(UINavigationController.ws_viewWillDisappear(_:)))
             
         }
     }()
@@ -85,32 +85,32 @@ extension UINavigationController {
         }
     }
     
-    @objc private func sx_viewDidLoad() {
+    @objc private func ws_viewDidLoad() {
         disableFixSpace(true, with: true)
-        sx_viewDidLoad()
+        ws_viewDidLoad()
     }
     
-    @objc private func sx_viewWillAppear(_ animated: Bool) {
+    @objc private func ws_viewWillAppear(_ animated: Bool) {
         disableFixSpace(true, with: false)
-        sx_viewWillAppear(animated)
+        ws_viewWillAppear(animated)
     }
     
-    @objc private func sx_viewWillDisappear(_ animated: Bool) {
+    @objc private func ws_viewWillDisappear(_ animated: Bool) {
         disableFixSpace(false, with: true)
-        sx_viewWillDisappear(animated)
+        ws_viewWillDisappear(animated)
     }
     
     private func disableFixSpace(_ disable: Bool, with temp: Bool) {
         if type(of: self) == UIImagePickerController.self {
             if disable == true {
-                if temp { tempDisableFixSpace = sx_disableFixSpace }
-                sx_disableFixSpace = true
+                if temp { tempDisableFixSpace = ws_disableFixSpace }
+                ws_disableFixSpace = true
                 if #available(iOS 11.0, *) {
                     tempBehavor = UIScrollView.appearance().contentInsetAdjustmentBehavior
                     UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
                 }
             } else {
-                sx_disableFixSpace = tempDisableFixSpace
+                ws_disableFixSpace = tempDisableFixSpace
                 if #available(iOS 11.0, *) {
                     UIScrollView.appearance().contentInsetAdjustmentBehavior = tempBehavor
                 }
@@ -122,21 +122,21 @@ extension UINavigationController {
 @available(iOS 11.0, *)
 extension UINavigationBar {
     
-    static let sx_initialize: Void = {
+    static let ws_initialize: Void = {
         DispatchQueue.once(UUID().uuidString) {
             swizzleMethod(UINavigationBar.self,
                           originalSelector: #selector(UINavigationBar.layoutSubviews),
-                          swizzleSelector: #selector(UINavigationBar.sx_layoutSubviews))
+                          swizzleSelector: #selector(UINavigationBar.ws_layoutSubviews))
             
         }
     }()
     
-    @objc func sx_layoutSubviews() {
-        sx_layoutSubviews()
+    @objc func ws_layoutSubviews() {
+        ws_layoutSubviews()
         
-        if sx_disableFixSpace == false {
+        if ws_disableFixSpace == false {
             layoutMargins = .zero
-            let space = sx_defultFixSpace
+            let space = ws_defultFixSpace
             for view in subviews {
                 if NSStringFromClass(view.classForCoder).contains("ContentView") {
                     view.layoutMargins = UIEdgeInsets(top: 0, left: space, bottom: 0, right: space)
@@ -158,13 +158,13 @@ extension UINavigationItem {
         if #available(iOS 11.0, *) {
             super.setValue(value, forKey: key)
         } else {
-            if sx_disableFixSpace == false && (key == BarButtonItem.left.rawValue || key == BarButtonItem.right.rawValue) {
+            if ws_disableFixSpace == false && (key == BarButtonItem.left.rawValue || key == BarButtonItem.right.rawValue) {
                 guard let item = value as? UIBarButtonItem else {
                     super.setValue(value, forKey: key)
                     return
                 }
                 let space = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-                space.width = sx_defultFixSpace - 16
+                space.width = ws_defultFixSpace - 16
                 
                 if key == BarButtonItem.left.rawValue {
                     leftBarButtonItems = [space, item]
