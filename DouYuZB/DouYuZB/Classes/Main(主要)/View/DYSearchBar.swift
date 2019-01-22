@@ -59,7 +59,7 @@ class DYSearchBar: UITextField {
         }
     }
     /// 占位文字的颜色(默认灰色)
-    var placeholderColor: UIColor? {
+    var placeholderColor: UIColor {
         set {
             guard let placeholderColor = RuntimeKey.placeholderColor else {
                 return
@@ -68,12 +68,12 @@ class DYSearchBar: UITextField {
         }
         get {
             guard let placeholderColor = RuntimeKey.placeholderColor else {
-                return UIColor(rgb: 161.0)
+                return UIColor(rgb: 165.0)
             }
-            return objc_getAssociatedObject(self, placeholderColor) as? UIColor
+            let color = objc_getAssociatedObject(self, placeholderColor) as? UIColor
+            return color ?? UIColor(rgb: 165.0)
         }
     }
-    
     
     // 快速创建searchBar
     override init(frame: CGRect) {
@@ -192,7 +192,7 @@ extension DYSearchBar {
         }
     }()
     
-    @objc func ws_placeholder() {
+    @objc private func ws_placeholder() {
         ws_placeholder()
         
         let label = self.value(forKeyPath: "placeholderLabel")
