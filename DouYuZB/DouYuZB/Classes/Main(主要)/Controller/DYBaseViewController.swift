@@ -42,7 +42,9 @@ extension DYBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 设置UI
         setupUI()
+        
         
     }
     
@@ -58,10 +60,12 @@ extension DYBaseViewController {
 extension DYBaseViewController {
     private func setupUI() {
         setupNav()
+        
+        setupContentView()
     }
     
     /// 设置导航栏
-    private func setupNav() {
+    func setupNav() {
         
         // 左边
         navigationItem.leftBarButtonItem = UIBarButtonItem.eyeFish(target: self, action: #selector(eyeFishClick))
@@ -72,6 +76,24 @@ extension DYBaseViewController {
         // 中间
 //        navigationItem.titleView = searchBar
         navigationController?.navigationBar.addSubview(searchBar)
+    }
+    
+    /// 创建内容控制器
+    func setupContentView() {
+//        let frame = CGRect
+        
+        let titles = ["分类", "推荐", "全部", "LOL", "王者荣耀", "绝地求生", "穿越火线", "DNF", "刺激战场", "CF手游", "DOTA2", "主机游戏", "炉石传说", "CS:GO", "堡垒之夜"]
+        
+        var controllers: [UIViewController] = []
+        for _ in titles {
+            let vc = UIViewController()
+            vc.view.backgroundColor = UIColor.random()
+            controllers.append(vc)
+        }
+        
+        let contentView = DYPageView(frame: view.bounds, titles: titles, controllers: controllers, titleColor: UIColor(rgb: 224), titleColor: .white, underLine: true, selectTitle: 1.5)
+        view.addSubview(contentView)
+        
     }
     
 }

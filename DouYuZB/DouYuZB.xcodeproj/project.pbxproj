@@ -10,6 +10,7 @@
 		641E731D21F55E8500AC7F2F /* DYSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641E731C21F55E8500AC7F2F /* DYSearchBar.swift */; };
 		641E732421F5E5B100AC7F2F /* UIBarButtonItem+FixSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641E732321F5E5B100AC7F2F /* UIBarButtonItem+FixSpace.swift */; };
 		641E732621F5E60600AC7F2F /* DispatchQueue+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641E732521F5E60600AC7F2F /* DispatchQueue+Extension.swift */; };
+		641E732A21F7144500AC7F2F /* DYPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641E732921F7144500AC7F2F /* DYPageView.swift */; };
 		641EC1DC21D3921800EB3832 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641EC1DB21D3921800EB3832 /* AppDelegate.swift */; };
 		641EC1E121D3921800EB3832 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 641EC1DF21D3921800EB3832 /* Main.storyboard */; };
 		641EC1E321D3921900EB3832 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 641EC1E221D3921900EB3832 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 		641E731C21F55E8500AC7F2F /* DYSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYSearchBar.swift; sourceTree = "<group>"; };
 		641E732321F5E5B100AC7F2F /* UIBarButtonItem+FixSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+FixSpace.swift"; sourceTree = "<group>"; };
 		641E732521F5E60600AC7F2F /* DispatchQueue+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Extension.swift"; sourceTree = "<group>"; };
+		641E732921F7144500AC7F2F /* DYPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DYPageView.swift; sourceTree = "<group>"; };
 		641EC1D821D3921800EB3832 /* DouYuZB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DouYuZB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		641EC1DB21D3921800EB3832 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		641EC1E021D3921800EB3832 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				641E731C21F55E8500AC7F2F /* DYSearchBar.swift */,
+				641E732921F7144500AC7F2F /* DYPageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -537,6 +540,7 @@
 				64ED094E21F0608700A5C610 /* DYTabBarController.swift in Sources */,
 				64ED095C21F169C900A5C610 /* DYDiscveryController.swift in Sources */,
 				641E731D21F55E8500AC7F2F /* DYSearchBar.swift in Sources */,
+				641E732A21F7144500AC7F2F /* DYPageView.swift in Sources */,
 				641EC1DC21D3921800EB3832 /* AppDelegate.swift in Sources */,
 				64ED096321F1AE0500A5C610 /* DYConst.swift in Sources */,
 				641E732421F5E5B100AC7F2F /* UIBarButtonItem+FixSpace.swift in Sources */,
