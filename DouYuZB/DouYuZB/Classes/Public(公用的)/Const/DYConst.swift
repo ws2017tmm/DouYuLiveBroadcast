@@ -10,7 +10,10 @@ import Foundation
 import UIKit
 
 // MARK: - 通知
+/// TabBarButton被重复点击的通知
 let DYTabBarButtonDidRepeatClickNotification = "DYTabBarButtonDidRepeatClickNotification"
+/// TitleButton被重复点击的通知
+let DYTitleButtonDidRepeatClickNotification = "DYTitleButtonDidRepeatClickNotification"
 
 
 // MARK: - 常量

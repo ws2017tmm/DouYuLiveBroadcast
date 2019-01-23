@@ -34,8 +34,11 @@ extension DYRecommendController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // 添加通知
+        /// 添加通知
+        // TabBarButton被重复点击的通知
         NotificationCenter.default.addObserver(self, selector: #selector(dropdownRefresh), name: NSNotification.Name(rawValue:DYTabBarButtonDidRepeatClickNotification), object: nil)
+        // TitleButton被重复点击的通知
+        NotificationCenter.default.addObserver(self, selector: #selector(dropdownRefresh), name: NSNotification.Name(rawValue:DYTitleButtonDidRepeatClickNotification), object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -45,12 +48,39 @@ extension DYRecommendController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: DYTabBarButtonDidRepeatClickNotification), object: nil)
     }
     
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+    }
+    
 }
 
 // MARK: - 设置UI
 extension DYRecommendController {
     private func setupUI() {
-//        title = "推荐"
+        self.edgesForExtendedLayout = UIRectEdge.bottom
+        // 设置内容view
+        setupContentView()
+    }
+    
+    /// 创建内容控制器
+    func setupContentView() {
+//        let frame = CGRect
+        
+        let titles = ["分类", "推荐", "全部", "LOL", "王者荣耀", "绝地求生", "穿越火线", "DNF", "刺激战场", "CF手游", "DOTA2", "主机游戏", "炉石传说", "CS:GO", "堡垒之夜"]
+        
+        var controllers: [UIViewController] = []
+        for _ in titles {
+            let vc = UIViewController()
+            vc.view.backgroundColor = UIColor.random()
+            controllers.append(vc)
+        }
+        
+        let contentView = DYPageView(frame: view.bounds, titles: titles, controllers: controllers, titleColor: UIColor(rgb: 224), titleColor: .white, underLine: true, selectTitle: 1.25)
+        contentView.topTitleViewHeight = 44
+        view.addSubview(contentView)
+        
     }
     
 }
