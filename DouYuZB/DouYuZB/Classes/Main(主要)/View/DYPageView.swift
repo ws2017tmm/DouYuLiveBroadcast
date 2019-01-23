@@ -10,7 +10,7 @@ import UIKit
 
 
 
-// MARK: - 属性+构造方法
+// MARK: - 属性 + 构造方法
 class DYPageView: UIView {
     
     override init(frame: CGRect) {
@@ -94,7 +94,7 @@ class DYPageView: UIView {
 
 
 
-// 私有方法
+//MARK: - 私有方法
 extension DYPageView {
     /// 创建头标题View
     private func createTitleView() {
