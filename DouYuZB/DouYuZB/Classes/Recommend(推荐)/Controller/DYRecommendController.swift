@@ -73,7 +73,7 @@ extension DYRecommendController {
         var controllers: [UIViewController] = []
         for _ in titles {
             let vc = UIViewController()
-            vc.view.backgroundColor = UIColor.random()
+            vc.view.backgroundColor = UIColor.random
             controllers.append(vc)
         }
         
