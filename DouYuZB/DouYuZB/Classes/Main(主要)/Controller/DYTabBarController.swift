@@ -30,7 +30,7 @@ class DYTabBarController: UITabBarController {
         tabBar.tintColor = UIColor.orange
         tabBar.barTintColor = UIColor.white
 //        tabBar.shadowImage = UIImage()
-        tabBar.backgroundImage = UIImage()
+        tabBar.backgroundImage = UIImage.image(UIColor.white)
         UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor : UIColor.black], for: .normal)
         
     }

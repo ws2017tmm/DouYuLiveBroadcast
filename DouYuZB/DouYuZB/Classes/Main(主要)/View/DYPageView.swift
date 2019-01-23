@@ -12,15 +12,14 @@ import UIKit
 /// 顶部标题下划线的高度
 private let kTopUnderLineHeight: CGFloat = 1.5
 private let kTopButtonLeftMargin: CGFloat = 10
-private let KTopButtonsMargin: CGFloat = kTopButtonLeftMargin * 2
+private let KTopButtonsMargin: CGFloat = kTopButtonLeftMargin
+private let kContentCellID = "kContentCellID"
 
 // MARK: - 属性 + 构造方法
 class DYPageView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(topTitleScrollView)
-        self.addSubview(contentCollectionView)
     }
     
     /// 快速创建pageView
@@ -81,13 +80,17 @@ class DYPageView: UIView {
         layout.scrollDirection = .horizontal
         
         /// frame随便写,再layoutSubViews重新布局
-        let collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.scrollsToTop = false
-//        collectionView.dataSource = self
-//        collectionView.delegate = self
+        collectionView.isPagingEnabled = true
+        collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = UIColor.random
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: kContentCellID)
         
         return collectionView
     }()
@@ -118,13 +121,31 @@ class DYPageView: UIView {
     private var selectTitleScale: CGFloat = 1.0
     
     /// 默认选中第0个
-    private var defaultPage: Int = 0
+    private var defaultPage: Int = 0 {
+        didSet {
+            // 标题
+            let button = topTitleButtons[defaultPage]
+            topTitleButtonClick(button)
+            // 内容
+            currentCollectionViewOffsetX = self.width * CGFloat(defaultPage)
+            contentCollectionView.setContentOffset(CGPoint(x: currentCollectionViewOffsetX, y: 0), animated: false)
+            
+            currentSelectdIndex = defaultPage
+            
+        }
+    }
     
     /// 所有顶部标题按钮的数组
     lazy private var topTitleButtons = [UIButton]()
     
+    /// 当前collectionView的偏移量
+    private var currentCollectionViewOffsetX: CGFloat = 0
+    
+    /// 点击标题按钮的时候,不需要执行scrollViewDidScroll代理方法
+    private var isForbidScroll: Bool = true
+    
     /// 顶部titleView的高度
-    var topTitleViewHeight: CGFloat = 35 {
+    var topTitleViewHeight: CGFloat = 40 {
         didSet {
             setNeedsLayout()
         }
@@ -154,6 +175,8 @@ class DYPageView: UIView {
 extension DYPageView {
     /// 创建头标题View
     private func createTopTitleView() {
+        /// scrollView
+        addSubview(topTitleScrollView)
         
         /// 创建buttons
         createTopTitleViewButtons()
@@ -162,10 +185,6 @@ extension DYPageView {
         if isShowUnderLine {
             createTopTitleViewUnderLine()
         }
-        
-        
-        
-        
     }
     
     //pragma MARK: - 创建标题View里面的buttons
@@ -181,7 +200,15 @@ extension DYPageView {
             button.addTarget(self, action: #selector(topTitleButtonClick), for: .touchUpInside)
             topTitleButtons.append(button)
             topTitleScrollView.addSubview(button)
+            
+            // 默认选中defaultPage
+            if index == defaultPage {
+                button.isSelected = true
+                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
+
+            }
         }
+        currentSelectdIndex = defaultPage
     }
     
     //pragma MARK: - 创建标题view的下划线
@@ -190,51 +217,177 @@ extension DYPageView {
     }
     
     
-    
-    /// 创建内容View
+    //pragma MARK: - 创建内容View
     private func createContentView() {
-        
+        addSubview(contentCollectionView)
     }
     
     
 }
 
-//MARK: - 顶部按钮的点击事件
+//MARK: - UICollectionViewDelegateFlowLayout(布局)
+extension DYPageView: UICollectionViewDelegateFlowLayout {
+    /// 每个item的大小
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return CGSize(width: self.width, height: self.height - topTitleViewHeight)
+    }
+}
+
+//MARK: - UICollectionViewDataSource
+extension DYPageView: UICollectionViewDataSource {
+    /// 每组多少个cell
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return controllers?.count ?? 0
+    }
+    
+    /// 每个cell显示什么
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        // 1.创建Cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kContentCellID, for: indexPath)
+        
+        // 2.给Cell设置内容
+        for view in cell.contentView.subviews {
+            view.removeFromSuperview()
+        }
+        
+        guard let childVc = controllers?[(indexPath as NSIndexPath).item] else {
+            return cell
+        }
+        
+        childVc.view.frame = cell.contentView.bounds
+        cell.contentView.addSubview(childVc.view)
+        
+        return cell
+    }
+}
+
+//MARK: - UICollectionViewDelegate
+extension DYPageView: UICollectionViewDelegate {
+    
+    //pragma MARK: - scrollView代理
+    // 开始拖拽
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        // 当前的偏移量
+        currentCollectionViewOffsetX = scrollView.contentOffset.x
+        
+        // 手动滚动,scrollView可以滚动
+        isForbidScroll = false
+    }
+    
+    // 滚动中
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if isForbidScroll { return }
+        
+        // 滚动的进度
+        var progress: CGFloat = 0.0
+        // 目标index
+        var targetIndex: Int = 0
+        
+        // 滚动的偏移(可正可负)
+        let offsetX = scrollView.contentOffset.x - currentCollectionViewOffsetX
+        
+        // 判断左滑还是右滑
+        if offsetX > 0 { // 左滑
+            progress = offsetX / scrollView.width
+            targetIndex = currentSelectdIndex + 1
+            if targetIndex == titles?.count {
+                targetIndex = (titles?.count)! - 1
+            }
+        } else { // 右滑
+            progress = offsetX / scrollView.width
+            targetIndex = currentSelectdIndex - 1
+            if targetIndex == -1 {
+                targetIndex = 0
+            }
+        }
+        
+        // 取出当前选中和target对应的button
+        let currentButton = topTitleButtons[currentSelectdIndex]
+        let targetButton = topTitleButtons[targetIndex]
+        
+        // 更改标题选中的状态
+        // 计算下划线该移动的位置
+        var frame: CGRect = CGRect.zero
+        if isShowUnderLine {
+            let underLineX = progress * (targetButton.x - currentButton.x) + topScrollUnderLine.x
+            let underLineWidth = progress * (targetButton.width - currentButton.width) + currentButton.width
+            frame = CGRect(x: underLineX, y: topScrollUnderLine.y, width: underLineWidth, height: topScrollUnderLine.height)
+        }
+        changeTitleViewState(sourceButton: currentButton, targetButton: targetButton, animation: false)
+        
+    }
+    
+    // 停止滚动
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        /// 改变当前选中的index
+        currentSelectdIndex = Int(scrollView.contentOffset.x / scrollView.width)
+    }
+    
+}
+
+//MARK: - 标题SscrollView和内容collecionView联动
 extension DYPageView {
+    //pragma MARK: - 顶部按钮的点击事件
     @objc func topTitleButtonClick(_ button: UIButton) {
         
         // 1.判断是否点击的相同的按钮
         if button.tag == currentSelectdIndex {
             // 发送通知，点击的是相同的按钮
             NotificationCenter.default.post(name: NSNotification.Name(DYTitleButtonDidRepeatClickNotification), object: nil)
+            return
         }
         
         // 2.获取之前的button
         let oldButton = topTitleButtons[currentSelectdIndex]
         
-        // 3.切换颜色，变更字体大小
-        oldButton.isSelected = false
-        oldButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
-        button.isSelected = true
-        button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
-        setNeedsLayout()
+        // 3.改变标题按钮的状态
+        changeTitleViewState(sourceButton: oldButton, targetButton: button)
         
-        // 4.记录两个index的差值
-        let offsetIndex = Double(abs(button.tag - currentSelectdIndex))
+        // 4.collectionView滚动
+        let point = CGPoint(x: contentCollectionView.width * CGFloat(button.tag), y: 0)
+        contentCollectionView.setContentOffset(point, animated: true)
         
         // 5.保存最新的下标值
         currentSelectdIndex = button.tag
+    }
+    
+    //pragma MARK: - 改变标题scrollView的一些状态
+    func changeTitleViewState(sourceButton: UIButton, targetButton: UIButton, animation: Bool = true) {
+        
+        // 切换颜色，变更字体大小
+        sourceButton.isSelected = false
+        sourceButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+        targetButton.isSelected = true
+        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
+        targetButton.titleLabel?.sizeToFit()
+        
+        // 记录两个index的差值
+        let offsetIndex = Double(abs(targetButton.tag - currentSelectdIndex))
         
         if isShowUnderLine {
-            // 滚动条滚动到合适的位置(宽度自适应)
-            UIView.animate(withDuration: 0.1*offsetIndex) {
-                self.topScrollUnderLine.frame = CGRect(x: button.x, y: self.topScrollUnderLine.y, width: button.width, height: self.topScrollUnderLine.height)
+            // 计算下划线的frame
+            let x = (targetButton.width - (targetButton.titleLabel?.width ?? 0)) * 0.5 + targetButton.x
+            let width = targetButton.titleLabel?.width ?? targetButton.width
+            let frame = CGRect(x: x, y: self.topScrollUnderLine.y, width: width, height: self.topScrollUnderLine.height)
+            
+            if animation {
+                // 滚动条滚动到合适的位置(宽度自适应)
+                UIView.animate(withDuration: 0.1*offsetIndex) {
+                    self.topScrollUnderLine.frame = frame
+                }
+            } else {
+                self.topScrollUnderLine.frame = frame
             }
         }
         
+        // 标题scrollView跟着滚动
+        
+        
     }
+    
 }
-
 
 // MARK: - 布局控件frame
 extension DYPageView {
@@ -257,7 +410,7 @@ extension DYPageView {
                 x = previousButton.right + KTopButtonsMargin
             }
             let y = (topTitleScrollView.height - button.height) * 0.5
-            button.frame = CGRect(x: x, y: y, width: button.width, height: button.height)
+            button.frame = CGRect(x: x, y: y, width: button.width+15, height: button.height)
             previousButton = button
             
             if index == (topTitleButtons.count-1) {
@@ -266,14 +419,19 @@ extension DYPageView {
             }
         }
         
+        /// 布局collectionView
+        contentCollectionView.frame = CGRect(x: 0, y: topTitleViewHeight, width: self.width, height: self.height - topTitleViewHeight)
+        
         let button = topTitleButtons[currentSelectdIndex]
+        guard let label = topTitleButtons[currentSelectdIndex].titleLabel else {
+            return
+        }
+        label.sizeToFit()
         /// 布局下滑线的位置
-        topScrollUnderLine.frame = CGRect(x: button.x, y: button.bottomY, width: button.width, height: kTopUnderLineHeight)
-        
-        
-        
-        
-        
+        topScrollUnderLine.centerX = label.centerX
+        topScrollUnderLine.y = button.bottomY
+        topScrollUnderLine.width = label.width
+        topScrollUnderLine.height = kTopUnderLineHeight
         
         
     }
