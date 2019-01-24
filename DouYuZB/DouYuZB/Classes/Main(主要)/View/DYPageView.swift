@@ -205,7 +205,6 @@ extension DYPageView {
             button.setTitleColor(selectTitleColor, for: .selected)
             button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
             button.tag = index
-            button.backgroundColor = UIColor.random
             button.addTarget(self, action: #selector(topTitleButtonClick), for: .touchUpInside)
             topTitleButtons.append(button)
             topTitleScrollView.addSubview(button)
@@ -289,7 +288,6 @@ extension DYPageView: UICollectionViewDelegate {
         var sourceIndex: Int = 0
         // 目标index
         var targetIndex: Int = 0
-        
         
         let currentOffsetX = scrollView.contentOffset.x
         let scrollViewW = scrollView.width
@@ -417,13 +415,13 @@ extension DYPageView: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         /// 改变当前选中的index
         currentSelectdIndex = Int(scrollView.contentOffset.x / scrollView.width)
-//        topScrollUnderLine.centerX = topTitleButtons[currentSelectdIndex].centerX
         currentUnderLineCenterX = topScrollUnderLine.centerX
         currentUnderLineWidth = topScrollUnderLine.width
         
         isForbidScroll = true
-//        let currentButton = topTitleButtons[currentSelectdIndex]
-//        currentButton.isSelected = true
+        
+        topTitleScrollViewScroll(target: topTitleButtons[currentSelectdIndex])
+        
     }
     
 }
@@ -490,8 +488,28 @@ extension DYPageView {
         }
         
         // 标题scrollView跟着滚动
+        topTitleScrollViewScroll(target: targetButton)
+    }
+    
+    //pragma MARK: - 顶部标题scrollViewg滚动,保证每次点击的按钮在屏幕最中间
+    func topTitleScrollViewScroll(target button: UIButton) {
+        // 1.拿到当前选中的button
+        if button.centerX < topTitleScrollView.centerX {
+            topTitleScrollView.setContentOffset(CGPoint.zero
+                , animated: true)
+            return
+        }
+        // 顶部scrollView应该移动的距离
+        let offsetX = abs(topTitleScrollView.centerX - button.centerX)
         
+        // 最大的位移
+        let maxOffsetX = topTitleScrollView.contentSize.width - topTitleScrollView.width
         
+        if maxOffsetX > offsetX {
+            topTitleScrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+        } else {
+            topTitleScrollView.setContentOffset(CGPoint(x: maxOffsetX, y: 0), animated: true)
+        }
     }
     
 }
