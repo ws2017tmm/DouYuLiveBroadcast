@@ -303,7 +303,7 @@ extension DYPageView: UICollectionViewDelegate {
             // 2.计算sourceIndex
             sourceIndex = Int(currentOffsetX / scrollViewW)
             // 3.计算targetIndex
-            targetIndex = currentSelectdIndex + 1
+            targetIndex = sourceIndex + 1
             if targetIndex == titles?.count {
                 targetIndex = (titles?.count)! - 1
             }
@@ -327,8 +327,10 @@ extension DYPageView: UICollectionViewDelegate {
         }
         
         // 取出当前选中和target对应的button
-        let currentButton = topTitleButtons[currentSelectdIndex]
+        let currentButton = topTitleButtons[sourceIndex]
         let targetButton = topTitleButtons[targetIndex]
+        
+        debugPrint(sourceIndex,targetIndex)
         
         // 改变字体大小
 //        let scaleBigFont = progress * (selectTitleScale - 1) * titleFont
@@ -389,6 +391,7 @@ extension DYPageView: UICollectionViewDelegate {
         currentSelectdIndex = Int(scrollView.contentOffset.x / scrollView.width)
         currentUnderLineCenterX = topScrollUnderLine.centerX
         currentUnderLineWidth = topScrollUnderLine.width
+        topScrollUnderLine.centerX = topTitleButtons[currentSelectdIndex].centerX
     }
     
 }
@@ -503,10 +506,10 @@ extension DYPageView {
         }
         label.sizeToFit()
         /// 布局下滑线的位置
-        topScrollUnderLine.centerX = label.centerX
-        topScrollUnderLine.y = button.bottomY
         topScrollUnderLine.width = label.width
         topScrollUnderLine.height = kTopUnderLineHeight
+        topScrollUnderLine.centerX = button.centerX
+        topScrollUnderLine.y = button.bottomY
         
         currentUnderLineCenterX = topScrollUnderLine.centerX
         currentUnderLineWidth = topScrollUnderLine.width
