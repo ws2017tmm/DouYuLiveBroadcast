@@ -394,19 +394,8 @@ extension DYPageView: UICollectionViewDelegate {
         // 3.1转变的进度
         sourceButton.setTitleColor(UIColor(r: fromRed+rangeRed, g: fromGreen+rangeGreen, b: fromBlue+rangeBlue), for: .selected)
         targetButton.setTitleColor(UIColor(r: toRed-rangeRed, g: toGreen-rangeGreen, b: toBlue-rangeBlue), for: .normal)
-
-        
+        // 记录index
         currentSelectdIndex = targetIndex
-//        changeTitleViewState(sourceButton: <#T##UIButton#>, targetButton: <#T##UIButton#>, animation: <#T##Bool#>)
-        
-        
-        
-        
-        
-        
-        
-        // 更改标题选中的状态
-//        changeTitleViewState(sourceButton: currentButton, targetButton: targetButton, animation: false)
         
     }
     
@@ -417,12 +406,11 @@ extension DYPageView: UICollectionViewDelegate {
         currentUnderLineCenterX = topScrollUnderLine.centerX
         currentUnderLineWidth = topScrollUnderLine.width
         
+        // 只有手动拖拽，才调用scrollViewDidScroll
         isForbidScroll = true
         
         topTitleScrollViewScroll(target: topTitleButtons[currentSelectdIndex])
-        
     }
-    
 }
 
 //MARK: - 标题ScrollView和内容collecionView联动
