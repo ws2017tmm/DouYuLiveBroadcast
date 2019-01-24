@@ -281,121 +281,10 @@ extension DYPageView: UICollectionViewDelegate {
         
         if isForbidScroll { return }
         
-        // 滚动的进度
-        var progress: CGFloat = 0.0// 滚动的进度
-        // 源index
-        var sourceIndex: Int = 0
-        // 目标index
-        var targetIndex: Int = 0
         
-        let currentOffsetX = scrollView.contentOffset.x
-        let scrollViewW = scrollView.width
-        // 滚动的偏移(可正可负)
-        let offsetX = currentOffsetX - collectionViewStartOffsetX
+        let (sourceIndex, targetIndex, progress) = getIndexAndProgress(scrollView)
         
-        // 判断左滑还是右滑
-        if offsetX > 0 { // 左滑
-            // 1.计算progress
-            progress = offsetX / scrollView.width
-            // 2.计算sourceIndex
-            sourceIndex = Int(currentOffsetX / scrollViewW)
-            // 3.计算targetIndex
-            targetIndex = sourceIndex + 1
-            if targetIndex == titles?.count {
-                targetIndex = (titles?.count)! - 1
-            }
-            // 4.如果完全划过去
-            if progress == 1.0 {
-                targetIndex = sourceIndex
-            }
-        } else { // 右滑
-            progress = -offsetX / scrollView.width
-            
-            // 2.计算targetIndex
-            targetIndex = Int(currentOffsetX / scrollViewW)
-            
-            // 3.计算sourceIndex
-            sourceIndex = targetIndex + 1
-            
-            if targetIndex == -1 {
-                targetIndex = 0
-            }
-            
-            if progress == 1.0 {
-                sourceIndex = targetIndex
-            }
-        }
-        
-        // 取出当前选中和target对应的button
-        let sourceButton = topTitleButtons[sourceIndex]
-        let targetButton = topTitleButtons[targetIndex]
-        
-//        debugPrint(progress)
-        
-        // 改变字体大小
-//        let scaleBigFont = progress * (selectTitleScale - 1) * titleFont
-//        let scaleSmallFont = (1-progress) * (selectTitleScale - 1) * titleFont
-//        currentButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleSmallFont)
-//        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleBigFont)
-//        currentButton.titleLabel?.sizeToFit()
-//        targetButton.titleLabel?.sizeToFit()
-        
-        // 下划线移动的位置
-        // 计算下划线的frame
-        if sourceIndex == targetIndex {
-            if offsetX > 0 { // 左滑
-                let button = topTitleButtons[targetIndex-1]
-                button.isSelected = false
-                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
-                button.setTitleColor(unSelectTitleColor, for: .normal)
-            } else { // 右滑
-                let button = topTitleButtons[targetIndex+1]
-                button.isSelected = false
-                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
-                button.setTitleColor(unSelectTitleColor, for: .normal)
-            }
-            targetButton.isSelected = true
-            targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
-            targetButton.setTitleColor(selectTitleColor, for: .selected)
-            targetButton.titleLabel?.sizeToFit()
-            if isShowUnderLine {
-                topScrollUnderLine.width = targetButton.titleLabel?.width ?? targetButton.width
-                topScrollUnderLine.centerX = targetButton.centerX
-            }
-            currentSelectdIndex = targetIndex
-            return
-        }
-        
-        if isShowUnderLine {
-            let centerX = progress * (targetButton.centerX - sourceButton.centerX) + currentUnderLineCenterX
-            let width = progress * (targetButton.titleLabel!.width - sourceButton.titleLabel!.width) + currentUnderLineWidth
-            topScrollUnderLine.width = width
-            topScrollUnderLine.centerX = centerX
-//            debugPrint(targetIndex,centerX)
-        }
-        
-        // 字体颜色渐变
-        // 1.拿到当前选中的颜色值
-        let fromRed = selectTitleColor.ws_red * 255.0
-        let fromGreen = selectTitleColor.ws_green * 255.0
-        let fromBlue = selectTitleColor.ws_blue * 255.0
-        
-        // 2.非选中的颜色值
-        let toRed = unSelectTitleColor.ws_red * 255.0
-        let toGreen = unSelectTitleColor.ws_green * 255.0
-        let toBlue = unSelectTitleColor.ws_blue * 255.0
-        
-        // 3.颜色值的变化范围
-        let rangeRed = (toRed - fromRed) * progress
-        let rangeGreen = (toGreen - fromGreen) * progress
-        let rangeBlue = (toBlue - fromBlue) * progress
-        
-        // 3.选中的颜色值 -> 非选中的颜色值
-        // 3.1转变的进度
-        sourceButton.setTitleColor(UIColor(r: fromRed+rangeRed, g: fromGreen+rangeGreen, b: fromBlue+rangeBlue), for: .selected)
-        targetButton.setTitleColor(UIColor(r: toRed-rangeRed, g: toGreen-rangeGreen, b: toBlue-rangeBlue), for: .normal)
-        // 记录index
-        currentSelectdIndex = targetIndex
+        changeTitleViewState(scrollView: scrollView, index: sourceIndex, index: targetIndex, progress: progress)
         
     }
     
@@ -410,6 +299,18 @@ extension DYPageView: UICollectionViewDelegate {
         isForbidScroll = true
         
         topTitleScrollViewScroll(target: topTitleButtons[currentSelectdIndex])
+        debugPrint("scrollViewDidEndDecelerating")
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        debugPrint("scrollViewDidEndDragging")
+
+        let (sourceIndex, targetIndex, progress) = getIndexAndProgress(scrollView)
+        
+        changeTitleViewState(scrollView: scrollView, index: sourceIndex, index: targetIndex, progress: progress)
+        
+        topTitleScrollViewScroll(target: topTitleButtons[currentSelectdIndex])
+
     }
 }
 
@@ -440,7 +341,7 @@ extension DYPageView {
     }
     
     //pragma MARK: - 改变标题scrollView的一些状态
-    func changeTitleViewState(sourceButton: UIButton, targetButton: UIButton, animation: Bool = true) {
+    private func changeTitleViewState(sourceButton: UIButton, targetButton: UIButton, animation: Bool = true) {
         
         // 切换颜色，变更字体大小
         sourceButton.isSelected = false
@@ -478,8 +379,148 @@ extension DYPageView {
         topTitleScrollViewScroll(target: targetButton)
     }
     
+    //pragma MARK: - 当前scrollView算出源Index和目标Index和进度
+    private func getIndexAndProgress(_ scrollView: UIScrollView) -> (Int, Int, CGFloat) {
+        // 滚动的进度
+        var progress: CGFloat = 0.0// 滚动的进度
+        // 源index
+        var sourceIndex: Int = 0
+        // 目标index
+        var targetIndex: Int = 0
+        
+        let currentOffsetX = scrollView.contentOffset.x
+        let scrollViewW = scrollView.width
+        // 滚动的偏移(可正可负)
+        let offsetX = currentOffsetX - collectionViewStartOffsetX
+        
+        // 判断左滑还是右滑
+        if offsetX > 0 { // 左滑
+            // 1.计算progress
+            progress = offsetX / scrollView.width
+            // 2.计算sourceIndex
+            sourceIndex = Int(currentOffsetX / scrollViewW)
+            // 3.计算targetIndex
+            targetIndex = sourceIndex + 1
+            if targetIndex == titles?.count {
+                targetIndex = (titles?.count)! - 1
+            }
+            // 4.如果完全划过去
+            if Int(currentOffsetX) % Int(scrollViewW) == 0 && currentOffsetX > 1 {
+                targetIndex = sourceIndex
+            }
+            debugPrint(sourceIndex,currentOffsetX)
+        } else { // 右滑
+            progress = -offsetX / scrollView.width
+            
+            // 2.计算targetIndex
+            targetIndex = Int(currentOffsetX / scrollViewW)
+            
+            // 3.计算sourceIndex
+            sourceIndex = targetIndex + 1
+            
+            if targetIndex == -1 {
+                targetIndex = 0
+            }
+            // 4.如果完全划过去
+            if Int(currentOffsetX) % Int(scrollViewW) == 0 {
+                progress = 1
+                sourceIndex = targetIndex
+            }
+        }
+        return (sourceIndex, targetIndex, progress)
+    }
+    
+    //pragma MARK: - 改变标题scrollView的一些状态
+    func changeTitleViewState(scrollView: UIScrollView,index source: Int, index target: Int, progress: CGFloat) {
+        
+        // 取出当前选中和target对应的button
+        let sourceButton = topTitleButtons[source]
+        let targetButton = topTitleButtons[target]
+        
+        
+        // 改变字体大小
+//        let scaleBigFont = progress * (selectTitleScale - 1) * titleFont
+//        let scaleSmallFont = (1-progress) * (selectTitleScale - 1) * titleFont
+//        currentButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleSmallFont)
+//        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleBigFont)
+//        currentButton.titleLabel?.sizeToFit()
+//        targetButton.titleLabel?.sizeToFit()
+        
+        // 下划线移动的位置
+        // 计算下划线的frame
+        if source == target {
+            let currentOffsetX = scrollView.contentOffset.x
+            let offsetX = currentOffsetX - collectionViewStartOffsetX
+            if offsetX > 0 { // 左滑
+                let button = topTitleButtons[target-1]
+                button.isSelected = false
+                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+                button.setTitleColor(unSelectTitleColor, for: .normal)
+            } else { // 右滑
+                let button = topTitleButtons[target+1]
+                button.isSelected = false
+                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+                button.setTitleColor(unSelectTitleColor, for: .normal)
+            }
+            targetButton.isSelected = true
+            targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
+            targetButton.setTitleColor(selectTitleColor, for: .selected)
+            targetButton.titleLabel?.sizeToFit()
+            if isShowUnderLine {
+                topScrollUnderLine.width = targetButton.titleLabel?.width ?? targetButton.width
+                topScrollUnderLine.centerX = targetButton.centerX
+            }
+            currentSelectdIndex = target
+//            debugPrint(sourceIndex,targetIndex)
+            return
+        } else {
+            if isShowUnderLine {
+                let centerX = progress * (targetButton.centerX - sourceButton.centerX) + currentUnderLineCenterX
+                let width = progress * (targetButton.titleLabel!.width - sourceButton.titleLabel!.width) + currentUnderLineWidth
+                topScrollUnderLine.width = width
+                topScrollUnderLine.centerX = centerX
+//            debugPrint(targetIndex,centerX)
+            }
+        }
+        
+        // 字体颜色渐变
+        // 1.拿到当前选中的颜色值
+        let fromRed = selectTitleColor.ws_red * 255.0
+        let fromGreen = selectTitleColor.ws_green * 255.0
+        let fromBlue = selectTitleColor.ws_blue * 255.0
+        
+        // 2.非选中的颜色值
+        let toRed = unSelectTitleColor.ws_red * 255.0
+        let toGreen = unSelectTitleColor.ws_green * 255.0
+        let toBlue = unSelectTitleColor.ws_blue * 255.0
+        
+        // 3.颜色值的变化范围
+        let rangeRed = (toRed - fromRed) * progress
+        let rangeGreen = (toGreen - fromGreen) * progress
+        let rangeBlue = (toBlue - fromBlue) * progress
+        
+        // 3.选中的颜色值 -> 非选中的颜色值
+        // 3.1转变的进度
+        sourceButton.setTitleColor(UIColor(r: fromRed+rangeRed, g: fromGreen+rangeGreen, b: fromBlue+rangeBlue), for: .selected)
+        targetButton.setTitleColor(UIColor(r: toRed-rangeRed, g: toGreen-rangeGreen, b: toBlue-rangeBlue), for: .normal)
+        // 记录index
+        currentSelectdIndex = target
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //pragma MARK: - 顶部标题scrollViewg滚动,保证每次点击的按钮在屏幕最中间
-    func topTitleScrollViewScroll(target button: UIButton) {
+    private func topTitleScrollViewScroll(target button: UIButton) {
         // 1.拿到当前选中的button
         if button.centerX < topTitleScrollView.centerX {
             topTitleScrollView.setContentOffset(CGPoint.zero
