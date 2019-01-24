@@ -47,7 +47,11 @@ class DYPageView: UIView {
         self.unSelectTitleColor = unSelect
         self.selectTitleColor = select
         self.isShowUnderLine = isShow
-        self.selectTitleScale = scale
+        if scale < 1.0 || scale > 1.5 {
+            self.selectTitleScale = 1.0
+        } else {
+            self.selectTitleScale = scale
+        }
         
         defer {
             self.titles = titles
@@ -127,8 +131,8 @@ class DYPageView: UIView {
             let button = topTitleButtons[defaultPage]
             topTitleButtonClick(button)
             // 内容
-            currentCollectionViewOffsetX = self.width * CGFloat(defaultPage)
-            contentCollectionView.setContentOffset(CGPoint(x: currentCollectionViewOffsetX, y: 0), animated: false)
+            collectionViewStartOffsetX = self.width * CGFloat(defaultPage)
+            contentCollectionView.setContentOffset(CGPoint(x: collectionViewStartOffsetX, y: 0), animated: false)
             
             currentSelectdIndex = defaultPage
             
@@ -139,7 +143,7 @@ class DYPageView: UIView {
     lazy private var topTitleButtons = [UIButton]()
     
     /// 当前collectionView的偏移量
-    private var currentCollectionViewOffsetX: CGFloat = 0
+    private var collectionViewStartOffsetX: CGFloat = 0
     
     /// 点击标题按钮的时候,不需要执行scrollViewDidScroll代理方法
     private var isForbidScroll: Bool = true
@@ -167,7 +171,11 @@ class DYPageView: UIView {
         }
     }
     
-    
+    /// 当前下划线的x
+    var currentUnderLineCenterX: CGFloat = 0
+    /// 当前下划线的width
+    var currentUnderLineWidth: CGFloat = 0
+
 }
 
 
@@ -197,16 +205,11 @@ extension DYPageView {
             button.setTitleColor(selectTitleColor, for: .selected)
             button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
             button.tag = index
+            button.backgroundColor = UIColor.random
             button.addTarget(self, action: #selector(topTitleButtonClick), for: .touchUpInside)
             topTitleButtons.append(button)
             topTitleScrollView.addSubview(button)
             
-            // 默认选中defaultPage
-            if index == defaultPage {
-                button.isSelected = true
-                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
-
-            }
         }
         currentSelectdIndex = defaultPage
     }
@@ -269,7 +272,7 @@ extension DYPageView: UICollectionViewDelegate {
     // 开始拖拽
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         // 当前的偏移量
-        currentCollectionViewOffsetX = scrollView.contentOffset.x
+        collectionViewStartOffsetX = scrollView.contentOffset.x
         
         // 手动滚动,scrollView可以滚动
         isForbidScroll = false
@@ -282,22 +285,42 @@ extension DYPageView: UICollectionViewDelegate {
         
         // 滚动的进度
         var progress: CGFloat = 0.0
+        // 源index
+        var sourceIndex: Int = 0
         // 目标index
         var targetIndex: Int = 0
         
+        
+        let currentOffsetX = scrollView.contentOffset.x
+        let scrollViewW = scrollView.width
         // 滚动的偏移(可正可负)
-        let offsetX = scrollView.contentOffset.x - currentCollectionViewOffsetX
+        let offsetX = currentOffsetX - collectionViewStartOffsetX
         
         // 判断左滑还是右滑
         if offsetX > 0 { // 左滑
+            // 1.计算progress
             progress = offsetX / scrollView.width
+            // 2.计算sourceIndex
+            sourceIndex = Int(currentOffsetX / scrollViewW)
+            // 3.计算targetIndex
             targetIndex = currentSelectdIndex + 1
             if targetIndex == titles?.count {
                 targetIndex = (titles?.count)! - 1
             }
+            // 4.如果完全划过去
+            if currentOffsetX - collectionViewStartOffsetX == scrollViewW {
+                progress = 1.0
+                targetIndex = sourceIndex
+            }
         } else { // 右滑
-            progress = offsetX / scrollView.width
-            targetIndex = currentSelectdIndex - 1
+            progress = 1 + offsetX / scrollView.width
+            
+            // 2.计算targetIndex
+            targetIndex = Int(currentOffsetX / scrollViewW)
+            
+            // 3.计算sourceIndex
+            sourceIndex = targetIndex + 1
+            
             if targetIndex == -1 {
                 targetIndex = 0
             }
@@ -307,15 +330,56 @@ extension DYPageView: UICollectionViewDelegate {
         let currentButton = topTitleButtons[currentSelectdIndex]
         let targetButton = topTitleButtons[targetIndex]
         
-        // 更改标题选中的状态
-        // 计算下划线该移动的位置
-        var frame: CGRect = CGRect.zero
+        // 改变字体大小
+//        let scaleBigFont = progress * (selectTitleScale - 1) * titleFont
+//        let scaleSmallFont = (1-progress) * (selectTitleScale - 1) * titleFont
+//        currentButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleSmallFont)
+//        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleBigFont)
+//        currentButton.titleLabel?.sizeToFit()
+//        targetButton.titleLabel?.sizeToFit()
+        
+        // 下划线移动的位置
+        // 计算下划线的frame
         if isShowUnderLine {
-            let underLineX = progress * (targetButton.x - currentButton.x) + topScrollUnderLine.x
-            let underLineWidth = progress * (targetButton.width - currentButton.width) + currentButton.width
-            frame = CGRect(x: underLineX, y: topScrollUnderLine.y, width: underLineWidth, height: topScrollUnderLine.height)
+            let centerX = progress * (targetButton.centerX - currentButton.centerX) + currentUnderLineCenterX
+            let width = progress * (targetButton.titleLabel!.width - currentButton.titleLabel!.width) + currentUnderLineWidth
+            topScrollUnderLine.width = width
+            topScrollUnderLine.centerX = centerX
         }
-        changeTitleViewState(sourceButton: currentButton, targetButton: targetButton, animation: false)
+        
+        // 字体颜色渐变
+        // 1.拿到当前选中的颜色值
+        let fromRed = selectTitleColor.ws_red
+        let fromGreen = selectTitleColor.ws_green
+        let fromBlue = selectTitleColor.ws_blue
+        
+        // 2.非选中的颜色值
+        let toRed = unSelectTitleColor.ws_red
+        let toGreen = unSelectTitleColor.ws_green
+        let toBlue = unSelectTitleColor.ws_blue
+        
+        // 3.颜色值的变化范围
+        let rangeRed = (toRed - fromRed) * progress
+        let rangeGreen = (toGreen - fromGreen) * progress
+        let rangeBlue = (toBlue - fromBlue) * progress
+        
+        // 3.选中的颜色值 -> 非选中的颜色值
+        // 3.1转变的进度
+        currentButton.setTitleColor(UIColor(r: fromRed+rangeRed, g: fromGreen+rangeGreen, b: fromBlue+rangeBlue), for: .normal)
+        targetButton.setTitleColor(UIColor(r: toRed-rangeRed, g: toGreen-rangeGreen, b: toBlue-rangeBlue), for: .normal)
+        
+        
+        currentSelectdIndex = targetIndex
+//        changeTitleViewState(sourceButton: <#T##UIButton#>, targetButton: <#T##UIButton#>, animation: <#T##Bool#>)
+        
+        
+        
+        
+        
+        
+        
+        // 更改标题选中的状态
+//        changeTitleViewState(sourceButton: currentButton, targetButton: targetButton, animation: false)
         
     }
     
@@ -323,6 +387,8 @@ extension DYPageView: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         /// 改变当前选中的index
         currentSelectdIndex = Int(scrollView.contentOffset.x / scrollView.width)
+        currentUnderLineCenterX = topScrollUnderLine.centerX
+        currentUnderLineWidth = topScrollUnderLine.width
     }
     
 }
@@ -361,6 +427,7 @@ extension DYPageView {
         sourceButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
         targetButton.isSelected = true
         targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
+//        targetButton.sizeToFit()
         targetButton.titleLabel?.sizeToFit()
         
         // 记录两个index的差值
@@ -368,17 +435,18 @@ extension DYPageView {
         
         if isShowUnderLine {
             // 计算下划线的frame
-            let x = (targetButton.width - (targetButton.titleLabel?.width ?? 0)) * 0.5 + targetButton.x
+            let centerX = targetButton.centerX
             let width = targetButton.titleLabel?.width ?? targetButton.width
-            let frame = CGRect(x: x, y: self.topScrollUnderLine.y, width: width, height: self.topScrollUnderLine.height)
             
             if animation {
                 // 滚动条滚动到合适的位置(宽度自适应)
                 UIView.animate(withDuration: 0.1*offsetIndex) {
-                    self.topScrollUnderLine.frame = frame
+                    self.topScrollUnderLine.width = width
+                    self.topScrollUnderLine.centerX = centerX
                 }
             } else {
-                self.topScrollUnderLine.frame = frame
+                self.topScrollUnderLine.width = width
+                self.topScrollUnderLine.centerX = centerX
             }
         }
         
@@ -410,12 +478,19 @@ extension DYPageView {
                 x = previousButton.right + KTopButtonsMargin
             }
             let y = (topTitleScrollView.height - button.height) * 0.5
-            button.frame = CGRect(x: x, y: y, width: button.width+15, height: button.height)
+            button.frame = CGRect(x: x, y: y, width: button.width * selectTitleScale + 10, height: button.height)
             previousButton = button
             
             if index == (topTitleButtons.count-1) {
                 /// topTitleScrollView的滚动范围
                 topTitleScrollView.contentSize = CGSize(width: button.right + kTopButtonLeftMargin, height: 0)
+            }
+            
+            // 默认选中defaultPage
+            if index == defaultPage {
+                button.isSelected = true
+                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
+                
             }
         }
         
@@ -426,13 +501,14 @@ extension DYPageView {
         guard let label = topTitleButtons[currentSelectdIndex].titleLabel else {
             return
         }
-        label.sizeToFit()
+//        label.sizeToFit()
         /// 布局下滑线的位置
         topScrollUnderLine.centerX = label.centerX
         topScrollUnderLine.y = button.bottomY
         topScrollUnderLine.width = label.width
         topScrollUnderLine.height = kTopUnderLineHeight
         
-        
+        currentUnderLineCenterX = topScrollUnderLine.centerX
+        currentUnderLineWidth = topScrollUnderLine.width
     }
 }

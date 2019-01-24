@@ -77,7 +77,7 @@ extension DYRecommendController {
             controllers.append(vc)
         }
         
-        let contentView = DYPageView(frame: view.bounds, titles: titles, controllers: controllers, titleColor: UIColor(rgb: 224), titleColor: .white, underLine: true, selectTitle: 1.25)
+        let contentView = DYPageView(frame: view.bounds, titles: titles, controllers: controllers, titleColor: UIColor(rgb: 0), titleColor: .white, underLine: true, selectTitle: 1.25)
         contentView.topTitleViewHeight = 44
         view.addSubview(contentView)
         

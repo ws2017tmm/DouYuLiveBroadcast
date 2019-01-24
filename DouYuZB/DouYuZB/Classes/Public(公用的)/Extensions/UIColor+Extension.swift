@@ -66,6 +66,53 @@ extension UIColor {
         self.init(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: 1)
     }
     
+    // MARK: - 获取颜色的rgb值
+    //pragma MARK: - 获取red
+    public var ws_red: CGFloat {
+        get {
+            var r: CGFloat = 0
+            var g: CGFloat = 0
+            var b: CGFloat = 0
+            var a: CGFloat = 0
+            self.getRed(&r, green: &g, blue: &b, alpha: &a)
+            
+            return r
+        }
+    }
+    
+    //pragma MARK: - 获取green
+    public var ws_green: CGFloat {
+        get {
+            var r: CGFloat = 0
+            var g: CGFloat = 0
+            var b: CGFloat = 0
+            var a: CGFloat = 0
+            self.getRed(&r, green: &g, blue: &b, alpha: &a)
+            
+            return g
+        }
+    }
+    
+    //pragma MARK: - 获取blue
+    public var ws_blue: CGFloat {
+        get {
+            var r: CGFloat = 0
+            var g: CGFloat = 0
+            var b: CGFloat = 0
+            var a: CGFloat = 0
+            self.getRed(&r, green: &g, blue: &b, alpha: &a)
+            
+            return b
+        }
+    }
+    
+    //pragma MARK: - 两个颜色值相互转换
+//    func toColor(to color: UIColor) -> <#return type#> {
+//        <#function body#>
+//    }
+    
+    
+    
 }
 
 
