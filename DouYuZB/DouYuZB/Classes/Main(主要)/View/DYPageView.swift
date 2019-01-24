@@ -497,11 +497,11 @@ extension DYPageView {
         /// 布局collectionView
         contentCollectionView.frame = CGRect(x: 0, y: topTitleViewHeight, width: self.width, height: self.height - topTitleViewHeight)
         
-        let button = topTitleButtons[currentSelectdIndex]
+        let button = topTitleButtons[defaultPage]
         guard let label = topTitleButtons[currentSelectdIndex].titleLabel else {
             return
         }
-//        label.sizeToFit()
+        label.sizeToFit()
         /// 布局下滑线的位置
         topScrollUnderLine.centerX = label.centerX
         topScrollUnderLine.y = button.bottomY
