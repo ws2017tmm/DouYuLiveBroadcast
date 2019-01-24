@@ -208,7 +208,6 @@ extension DYPageView {
             button.addTarget(self, action: #selector(topTitleButtonClick), for: .touchUpInside)
             topTitleButtons.append(button)
             topTitleScrollView.addSubview(button)
-            
         }
         currentSelectdIndex = defaultPage
     }
