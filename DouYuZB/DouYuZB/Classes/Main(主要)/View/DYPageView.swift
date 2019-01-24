@@ -493,7 +493,6 @@ extension DYPageView {
             if index == defaultPage {
                 button.isSelected = true
                 button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
-                
             }
         }
         
