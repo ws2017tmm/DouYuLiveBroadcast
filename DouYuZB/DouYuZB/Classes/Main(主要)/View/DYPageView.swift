@@ -394,7 +394,7 @@ extension DYPageView {
         let offsetX = currentOffsetX - collectionViewStartOffsetX
         
         // 判断左滑还是右滑
-        if offsetX > 0 { // 左滑
+        if offsetX >= 0 { // 左滑
             // 1.计算progress
             progress = offsetX / scrollView.width
             // 2.计算sourceIndex
@@ -432,7 +432,9 @@ extension DYPageView {
     
     //pragma MARK: - 改变标题scrollView的一些状态
     func changeTitleViewState(scrollView: UIScrollView,index source: Int, index target: Int, progress: CGFloat) {
-        
+        if progress == 0 {
+            return
+        }
         // 取出当前选中和target对应的button
         let sourceButton = topTitleButtons[source]
         let targetButton = topTitleButtons[target]
@@ -451,11 +453,12 @@ extension DYPageView {
         if source == target {
             let currentOffsetX = scrollView.contentOffset.x
             let offsetX = currentOffsetX - collectionViewStartOffsetX
-            if offsetX > 0 { // 左滑
+            if offsetX >= 0 { // 左滑
                 let button = topTitleButtons[target-1]
                 button.isSelected = false
                 button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
                 button.setTitleColor(unSelectTitleColor, for: .normal)
+                button.setTitleColor(selectTitleColor, for: .selected)
             } else { // 右滑
                 let button = topTitleButtons[target+1]
                 button.isSelected = false
@@ -465,6 +468,7 @@ extension DYPageView {
             targetButton.isSelected = true
             targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
             targetButton.setTitleColor(selectTitleColor, for: .selected)
+            targetButton.setTitleColor(unSelectTitleColor, for: .normal)
             targetButton.titleLabel?.sizeToFit()
             if isShowUnderLine {
                 topScrollUnderLine.width = targetButton.titleLabel?.width ?? targetButton.width
@@ -501,8 +505,16 @@ extension DYPageView {
         
         // 3.选中的颜色值 -> 非选中的颜色值
         // 3.1转变的进度
-        sourceButton.setTitleColor(UIColor(r: fromRed+rangeRed, g: fromGreen+rangeGreen, b: fromBlue+rangeBlue), for: .selected)
-        targetButton.setTitleColor(UIColor(r: toRed-rangeRed, g: toGreen-rangeGreen, b: toBlue-rangeBlue), for: .normal)
+        sourceButton.isSelected = false
+        sourceButton.setTitleColor(UIColor(r: fromRed+rangeRed, g: fromGreen+rangeGreen, b: fromBlue+rangeBlue), for: .normal)
+//        sourceButton.setTitleColor(selectTitleColor, for: .selected)
+        sourceButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+        
+        targetButton.isSelected = true
+        targetButton.setTitleColor(UIColor(r: toRed-rangeRed, g: toGreen-rangeGreen, b: toBlue-rangeBlue), for: .selected)
+//        targetButton.setTitleColor(unSelectTitleColor, for: .normal)
+        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
+
         // 记录index
         currentSelectdIndex = target
         
