@@ -66,10 +66,16 @@ class DYSearchBar: UITextField {
     /// 占位文字的大小(默认13) placeholderSize
     var placeholderSize: CGFloat {
         set {
-            guard let placeholderSize = RuntimeKey.placeholderSize else {
+            guard let placeholderSizeKey = RuntimeKey.placeholderSize else {
                 return
             }
-            objc_setAssociatedObject(self, placeholderSize, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, placeholderSizeKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            
+            let label = self.value(forKeyPath: "placeholderLabel")
+            guard let placeholderLabel = label as? UILabel  else {
+                return
+            }
+            placeholderLabel.font = UIFont.systemFont(ofSize: placeholderSize)
         }
         get {
             guard let placeholderSize = RuntimeKey.placeholderSize else {
@@ -82,10 +88,16 @@ class DYSearchBar: UITextField {
     /// 占位文字的颜色(默认灰色)
     var placeholderColor: UIColor {
         set {
-            guard let placeholderColor = RuntimeKey.placeholderColor else {
+            guard let placeholderColorKey = RuntimeKey.placeholderColor else {
                 return
             }
-            objc_setAssociatedObject(self, placeholderColor, newValue, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(self, placeholderColorKey, newValue, .OBJC_ASSOCIATION_RETAIN)
+            
+            let label = self.value(forKeyPath: "placeholderLabel")
+            guard let placeholderLabel = label as? UILabel  else {
+                return
+            }
+            placeholderLabel.textColor = placeholderColor
         }
         get {
             guard let placeholderColor = RuntimeKey.placeholderColor else {
