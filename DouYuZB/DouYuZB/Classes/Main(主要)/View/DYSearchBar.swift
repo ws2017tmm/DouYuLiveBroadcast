@@ -42,7 +42,38 @@ class DYSearchBar: UITextField {
         }
     }
     
-    /// 占位文字的大小(默认17) placeholderSize
+    /// 定时器
+    private var timer: Timer?
+    
+    /// 默认切换占位文字的时间(3秒)
+    var defaultChangePlaceholderTime: TimeInterval = 3.0 {
+        didSet {
+            timer?.fireDate = Date.distantFuture
+            timer?.fireDate = Date()
+        }
+    }
+    
+    /// 占位文字数组
+    var placeholderList: [String]? {
+        didSet {
+            if placeholderList == nil { return }
+            
+            var index = 0
+            timer = Timer(timeInterval: defaultChangePlaceholderTime, repeats: true, block: { _ in
+                if index >= (self.placeholderList?.count)! {
+                    index = 0
+                }
+                let placeholder = self.placeholderList![index]
+                self.placeholder = placeholder
+                index += 1
+            })
+            RunLoop.current.add(timer!, forMode: .common)
+            timer?.fire()
+        }
+    }
+    
+    
+    /// 占位文字的大小(默认13) placeholderSize
     var placeholderSize: CGFloat {
         set {
             guard let placeholderSize = RuntimeKey.placeholderSize else {
@@ -52,10 +83,10 @@ class DYSearchBar: UITextField {
         }
         get {
             guard let placeholderSize = RuntimeKey.placeholderSize else {
-                return 17.0
+                return 13.0
             }
             let size = objc_getAssociatedObject(self, placeholderSize) as? CGFloat
-            return size ?? 17.0
+            return size ?? 13.0
         }
     }
     /// 占位文字的颜色(默认灰色)
@@ -158,7 +189,7 @@ extension DYSearchBar {
                 rect.origin.x = (self.width - rect.size.width) * 0.5
                 return rect
             }
-            let placeholderWidth = NSString(string: placeholder).boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: rect.size.height), options: .usesLineFragmentOrigin, attributes: nil, context: nil).size.width
+            let placeholderWidth = NSString(string: placeholder).boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: rect.size.height), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font : placeholderSize], context: nil).size.width
             
             rect.origin.x = (self.width - rect.size.width - placeholderWidth) * 0.5 - kSpaceBetweenIconAndPlaceholder
             

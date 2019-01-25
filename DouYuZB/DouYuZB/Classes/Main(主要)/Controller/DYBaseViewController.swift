@@ -25,9 +25,10 @@ class DYBaseViewController: UIViewController {
         
         let searchBar = DYSearchBar(rightImage: "cm_nav_richscan", frame: frame)
         searchBar.myDelegate = self
-        searchBar.placeholderSize = 17.0
+        searchBar.placeholderSize = 13.0
 //        searchBar.placeholderColor = .red
-        searchBar.placeholder = "uzi"
+        let placeholderList = ["uzi", "dota", "韦神", "LCK", "不求人"]
+        searchBar.placeholderList = placeholderList
         
         return searchBar
     }()
