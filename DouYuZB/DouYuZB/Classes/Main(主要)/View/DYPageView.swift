@@ -496,32 +496,18 @@ extension DYPageView {
             }
         }
         
-        //TODO: - 可以封装
         // 字体颜色渐变
-        // 1.拿到当前选中的颜色值
-        let fromRed = selectTitleColor.ws_red * 255.0
-        let fromGreen = selectTitleColor.ws_green * 255.0
-        let fromBlue = selectTitleColor.ws_blue * 255.0
-        
-        // 2.非选中的颜色值
-        let toRed = unSelectTitleColor.ws_red * 255.0
-        let toGreen = unSelectTitleColor.ws_green * 255.0
-        let toBlue = unSelectTitleColor.ws_blue * 255.0
-        
-        // 3.颜色值的变化范围
-        let rangeRed = (toRed - fromRed) * progress
-        let rangeGreen = (toGreen - fromGreen) * progress
-        let rangeBlue = (toBlue - fromBlue) * progress
+        let exchangeColor = UIColor.exchangeColor(startColor: selectTitleColor, endColor: unSelectTitleColor, progress: progress)
         
         // 3.选中的颜色值 -> 非选中的颜色值
         // 3.1转变的进度
         sourceButton.isSelected = false
-        sourceButton.setTitleColor(UIColor(r: fromRed+rangeRed, g: fromGreen+rangeGreen, b: fromBlue+rangeBlue), for: .normal)
+        sourceButton.setTitleColor(exchangeColor.startProgressColor, for: .normal)
 //        sourceButton.setTitleColor(selectTitleColor, for: .selected)
         sourceButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
         
         targetButton.isSelected = true
-        targetButton.setTitleColor(UIColor(r: toRed-rangeRed, g: toGreen-rangeGreen, b: toBlue-rangeBlue), for: .selected)
+        targetButton.setTitleColor(exchangeColor.endProgressColor, for: .selected)
 //        targetButton.setTitleColor(unSelectTitleColor, for: .normal)
         targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
 

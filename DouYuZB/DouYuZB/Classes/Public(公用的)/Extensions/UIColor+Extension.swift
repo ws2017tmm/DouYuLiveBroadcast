@@ -106,10 +106,33 @@ extension UIColor {
         }
     }
     
-    //pragma MARK: - 两个颜色值相互转换
-//    func toColor(to color: UIColor) -> <#return type#> {
-//        <#function body#>
-//    }
+    /// 两个颜色值互换
+    ///
+    /// - Parameters:
+    ///   - start: 起始颜色值
+    ///   - end: 结束颜色值
+    /// - Returns: 返回元组(开始颜色值的变化,结束颜色值的变化)
+    class func exchangeColor(startColor: UIColor, endColor: UIColor, progress: CGFloat) -> (startProgressColor: UIColor, endProgressColor: UIColor) {
+        // 1.拿到当前选中的颜色值
+        let startRed = startColor.ws_red * 255.0
+        let startGreen = startColor.ws_green * 255.0
+        let startBlue = startColor.ws_blue * 255.0
+        
+        // 2.非选中的颜色值
+        let endRed = endColor.ws_red * 255.0
+        let endGreen = endColor.ws_green * 255.0
+        let endBlue = endColor.ws_blue * 255.0
+        
+        // 3.颜色值的变化范围
+        let rangeRed = (endRed - startRed) * progress
+        let rangeGreen = (endGreen - startGreen) * progress
+        let rangeBlue = (endBlue - startBlue) * progress
+        
+        let startProgressColor = UIColor(red: startRed+rangeRed, green: startGreen+rangeGreen, blue: startBlue+rangeBlue, alpha: 1)
+        let endProgressColor = UIColor(red: endRed-rangeRed, green: endGreen-rangeGreen, blue: endBlue-rangeBlue, alpha: 1)
+        
+        return (startProgressColor, endProgressColor)
+    }
     
     
     
