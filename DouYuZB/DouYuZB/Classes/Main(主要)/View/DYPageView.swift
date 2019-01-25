@@ -495,27 +495,9 @@ extension DYPageView {
             }
             
             // 字体颜色渐变
-//            let exchangeColor = UIColor.exchangeColor(startColor: selectTitleColor, endColor: unSelectTitleColor, progress: progress)
-//            let startProgressColor = exchangeColor.startProgressColor
-//            let endProgressColor = exchangeColor.endProgressColor
-//            debugPrint(startProgressColor.ws_red, endProgressColor.ws_red)
-            // 1.拿到当前选中的颜色值
-            let startRed = selectTitleColor.ws_red * 255.0
-            let startGreen = selectTitleColor.ws_green * 255.0
-            let startBlue = selectTitleColor.ws_blue * 255.0
-            
-            // 2.非选中的颜色值
-            let endRed = unSelectTitleColor.ws_red * 255.0
-            let endGreen = unSelectTitleColor.ws_green * 255.0
-            let endBlue = unSelectTitleColor.ws_blue * 255.0
-            
-            // 3.颜色值的变化范围
-            let rangeRed = (endRed - startRed) * progress
-            let rangeGreen = (endGreen - startGreen) * progress
-            let rangeBlue = (endBlue - startBlue) * progress
-            
-            let startProgressColor = UIColor(red: startRed+rangeRed, green: startGreen+rangeGreen, blue: startBlue+rangeBlue, alpha: 1)
-            let endProgressColor = UIColor(red: endRed-rangeRed, green: endGreen-rangeGreen, blue: endBlue-rangeBlue, alpha: 1)
+            let exchangeColor = UIColor.exchangeColor(startColor: selectTitleColor, endColor: unSelectTitleColor, progress: progress)
+            let startProgressColor = exchangeColor.startProgressColor
+            let endProgressColor = exchangeColor.endProgressColor
             
             // 3.选中的颜色值 -> 非选中的颜色值
             // 3.1转变的进度
