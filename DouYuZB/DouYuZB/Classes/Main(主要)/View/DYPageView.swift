@@ -406,7 +406,7 @@ extension DYPageView {
                 targetIndex = (titles?.count)! - 1
             }
             // 4.如果完全划过去
-            if Int(currentOffsetX) % Int(scrollViewW) == 0 && currentOffsetX > 1 {
+            if Int(currentOffsetX) % Int(scrollViewW) == 0 {
                 targetIndex = sourceIndex
                 progress = 1
             }
@@ -442,40 +442,39 @@ extension DYPageView {
     
     //pragma MARK: - 改变标题scrollView的一些状态
     func changeTitleViewState(scrollView: UIScrollView,index source: Int, index target: Int, progress: CGFloat) {
-        if progress == 0 {
-            return
-        }
+//        if progress == 0 {
+//            return
+//        }
         // 取出当前选中和target对应的button
         let sourceButton = topTitleButtons[source]
         let targetButton = topTitleButtons[target]
         
-        
-        // 改变字体大小
-//        let scaleBigFont = progress * (selectTitleScale - 1) * titleFont
-//        let scaleSmallFont = (1-progress) * (selectTitleScale - 1) * titleFont
-//        currentButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleSmallFont)
-//        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleBigFont)
-//        currentButton.titleLabel?.sizeToFit()
-//        targetButton.titleLabel?.sizeToFit()
-        
         // 下划线移动的位置
         // 计算下划线的frame
         if source == target {
-            let currentOffsetX = scrollView.contentOffset.x
-            let offsetX = currentOffsetX - collectionViewStartOffsetX
-            debugPrint(offsetX)
-            if offsetX >= 0 { // 左滑
-                let button = topTitleButtons[target-1]
-                button.isSelected = false
-                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
-                button.setTitleColor(unSelectTitleColor, for: .normal)
-                button.setTitleColor(selectTitleColor, for: .selected)
-            } else { // 右滑
-                let button = topTitleButtons[target+1]
-                button.isSelected = false
-                button.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
-                button.setTitleColor(unSelectTitleColor, for: .normal)
+            
+            var previousButton: UIButton = UIButton()
+            var nextButton: UIButton = UIButton()
+            if target == 0 {
+                previousButton = topTitleButtons[0]
+                nextButton = topTitleButtons[target+1]
+            } else if target == topTitleButtons.count-1  {
+                previousButton = topTitleButtons[target-1]
+                nextButton = topTitleButtons[topTitleButtons.count-1]
+            } else {
+                previousButton = topTitleButtons[target-1]
+                nextButton = topTitleButtons[target+1]
             }
+            previousButton.isSelected = false
+            previousButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+            previousButton.setTitleColor(unSelectTitleColor, for: .normal)
+            previousButton.setTitleColor(selectTitleColor, for: .selected)
+            
+            nextButton.isSelected = false
+            nextButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+            nextButton.setTitleColor(unSelectTitleColor, for: .normal)
+            nextButton.setTitleColor(selectTitleColor, for: .selected)
+            
             targetButton.isSelected = true
             targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
             targetButton.setTitleColor(selectTitleColor, for: .selected)
@@ -494,23 +493,52 @@ extension DYPageView {
                 topScrollUnderLine.width = width
                 topScrollUnderLine.centerX = centerX
             }
+            
+            // 字体颜色渐变
+//            let exchangeColor = UIColor.exchangeColor(startColor: selectTitleColor, endColor: unSelectTitleColor, progress: progress)
+//            let startProgressColor = exchangeColor.startProgressColor
+//            let endProgressColor = exchangeColor.endProgressColor
+//            debugPrint(startProgressColor.ws_red, endProgressColor.ws_red)
+            // 1.拿到当前选中的颜色值
+            let startRed = selectTitleColor.ws_red * 255.0
+            let startGreen = selectTitleColor.ws_green * 255.0
+            let startBlue = selectTitleColor.ws_blue * 255.0
+            
+            // 2.非选中的颜色值
+            let endRed = unSelectTitleColor.ws_red * 255.0
+            let endGreen = unSelectTitleColor.ws_green * 255.0
+            let endBlue = unSelectTitleColor.ws_blue * 255.0
+            
+            // 3.颜色值的变化范围
+            let rangeRed = (endRed - startRed) * progress
+            let rangeGreen = (endGreen - startGreen) * progress
+            let rangeBlue = (endBlue - startBlue) * progress
+            
+            let startProgressColor = UIColor(red: startRed+rangeRed, green: startGreen+rangeGreen, blue: startBlue+rangeBlue, alpha: 1)
+            let endProgressColor = UIColor(red: endRed-rangeRed, green: endGreen-rangeGreen, blue: endBlue-rangeBlue, alpha: 1)
+            
+            // 3.选中的颜色值 -> 非选中的颜色值
+            // 3.1转变的进度
+            sourceButton.isSelected = false
+            sourceButton.setTitleColor(startProgressColor, for: .normal)
+            sourceButton.setTitleColor(selectTitleColor, for: .selected)
+            sourceButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+            
+            targetButton.isSelected = true
+            targetButton.setTitleColor(endProgressColor, for: .selected)
+            targetButton.setTitleColor(unSelectTitleColor, for: .normal)
+            targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
         }
         
-        // 字体颜色渐变
-        let exchangeColor = UIColor.exchangeColor(startColor: selectTitleColor, endColor: unSelectTitleColor, progress: progress)
         
-        // 3.选中的颜色值 -> 非选中的颜色值
-        // 3.1转变的进度
-        sourceButton.isSelected = false
-        sourceButton.setTitleColor(exchangeColor.startProgressColor, for: .normal)
-//        sourceButton.setTitleColor(selectTitleColor, for: .selected)
-        sourceButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont)
+        // 字体大小渐变
+//        let scaleBigFont = progress * (selectTitleScale - 1) * titleFont
+//        let scaleSmallFont = (1-progress) * (selectTitleScale - 1) * titleFont
+//        currentButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleSmallFont)
+//        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont + scaleBigFont)
+//        currentButton.titleLabel?.sizeToFit()
+//        targetButton.titleLabel?.sizeToFit()
         
-        targetButton.isSelected = true
-        targetButton.setTitleColor(exchangeColor.endProgressColor, for: .selected)
-//        targetButton.setTitleColor(unSelectTitleColor, for: .normal)
-        targetButton.titleLabel?.font = UIFont.systemFont(ofSize: titleFont*selectTitleScale)
-
         // 记录index
         currentSelectdIndex = target
         
