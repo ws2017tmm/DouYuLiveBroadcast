@@ -128,8 +128,8 @@ extension UIColor {
         let rangeGreen = (endGreen - startGreen) * progress
         let rangeBlue = (endBlue - startBlue) * progress
         
-        let startProgressColor = UIColor(red: startRed+rangeRed, green: startGreen+rangeGreen, blue: startBlue+rangeBlue, alpha: 1)
-        let endProgressColor = UIColor(red: endRed-rangeRed, green: endGreen-rangeGreen, blue: endBlue-rangeBlue, alpha: 1)
+        let startProgressColor = UIColor(red: (startRed+rangeRed)/255.0, green: (startGreen+rangeGreen)/255.0, blue: (startBlue+rangeBlue)/255.0, alpha: 1)
+        let endProgressColor = UIColor(red: (endRed-rangeRed)/255.0, green: (endGreen-rangeGreen)/255.0, blue: (endBlue-rangeBlue)/255.0, alpha: 1)
         
         return (startProgressColor, endProgressColor)
     }

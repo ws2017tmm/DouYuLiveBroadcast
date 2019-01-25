@@ -499,8 +499,8 @@ extension DYPageView {
             let startProgressColor = exchangeColor.startProgressColor
             let endProgressColor = exchangeColor.endProgressColor
             
-            // 3.选中的颜色值 -> 非选中的颜色值
-            // 3.1转变的进度
+            // 选中的颜色值 -> 非选中的颜色值
+            // 转变的进度
             sourceButton.isSelected = false
             sourceButton.setTitleColor(startProgressColor, for: .normal)
             sourceButton.setTitleColor(selectTitleColor, for: .selected)
