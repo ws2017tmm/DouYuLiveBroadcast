@@ -46,10 +46,11 @@ class DYSearchBar: UITextField {
     private var timer: Timer?
     
     /// 默认切换占位文字的时间(3秒)
-    var defaultChangePlaceholderTime: TimeInterval = 3.0 {
+    var defaultChangePlaceholderTime: TimeInterval = 1.0 {
         didSet {
-            timer?.fireDate = Date.distantFuture
-            timer?.fireDate = Date()
+            if timer == nil { return }
+            removeTimer()
+            createTimer()
         }
     }
     
@@ -57,18 +58,7 @@ class DYSearchBar: UITextField {
     var placeholderList: [String]? {
         didSet {
             if placeholderList == nil { return }
-            
-            var index = 0
-            timer = Timer(timeInterval: defaultChangePlaceholderTime, repeats: true, block: { _ in
-                if index >= (self.placeholderList?.count)! {
-                    index = 0
-                }
-                let placeholder = self.placeholderList![index]
-                self.placeholder = placeholder
-                index += 1
-            })
-            RunLoop.current.add(timer!, forMode: .common)
-            timer?.fire()
+            createTimer()
         }
     }
     
@@ -162,6 +152,28 @@ class DYSearchBar: UITextField {
         }
     }
     
+}
+
+// MARK: - 定时器
+extension DYSearchBar {
+    private func createTimer() {
+        var index = 0
+        timer = Timer(timeInterval: defaultChangePlaceholderTime, repeats: true, block: { _ in
+            if index >= (self.placeholderList?.count)! {
+                index = 0
+            }
+            let placeholder = self.placeholderList![index]
+            self.placeholder = placeholder
+            index += 1
+        })
+        RunLoop.current.add(timer!, forMode: .common)
+        timer?.fire()
+    }
+    
+    private func removeTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
 }
 
 // MARK: - 点击事件处理

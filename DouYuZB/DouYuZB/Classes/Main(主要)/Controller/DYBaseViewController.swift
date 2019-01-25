@@ -29,7 +29,7 @@ class DYBaseViewController: UIViewController {
 //        searchBar.placeholderColor = .red
         let placeholderList = ["uzi", "dota", "韦神", "LCK", "不求人"]
         searchBar.placeholderList = placeholderList
-        
+        searchBar.defaultChangePlaceholderTime = 3.0
         return searchBar
     }()
     
