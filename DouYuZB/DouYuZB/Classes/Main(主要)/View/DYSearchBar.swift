@@ -46,7 +46,7 @@ class DYSearchBar: UITextField {
     private var timer: Timer?
     
     /// 默认切换占位文字的时间(3秒)
-    var defaultChangePlaceholderTime: TimeInterval = 1.0 {
+    var defaultChangePlaceholderTime: TimeInterval = 3.0 {
         didSet {
             if timer == nil { return }
             removeTimer()
