@@ -286,6 +286,9 @@ extension DYPageView: UICollectionViewDelegate {
         
         changeTitleViewState(scrollView: scrollView, index: sourceIndex, index: targetIndex, progress: progress)
         
+        // 标题scrollView跟着滚动
+        let targetButton = topTitleButtons[currentSelectdIndex]
+        topTitleScrollViewScroll(target: targetButton)
     }
     
     // 停止滚动
@@ -299,11 +302,9 @@ extension DYPageView: UICollectionViewDelegate {
         isForbidScroll = true
         
         topTitleScrollViewScroll(target: topTitleButtons[currentSelectdIndex])
-        debugPrint("scrollViewDidEndDecelerating")
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        debugPrint("scrollViewDidEndDragging")
 
         let (sourceIndex, targetIndex, progress) = getIndexAndProgress(scrollView)
         
@@ -407,8 +408,13 @@ extension DYPageView {
             // 4.如果完全划过去
             if Int(currentOffsetX) % Int(scrollViewW) == 0 && currentOffsetX > 1 {
                 targetIndex = sourceIndex
+                progress = 1
             }
-            debugPrint(sourceIndex,currentOffsetX)
+            if offsetX > scrollViewW {
+                progress = 1
+                targetIndex = sourceIndex
+            }
+//            debugPrint(sourceIndex,currentOffsetX)
         } else { // 右滑
             progress = -offsetX / scrollView.width
             
@@ -425,6 +431,10 @@ extension DYPageView {
             if Int(currentOffsetX) % Int(scrollViewW) == 0 {
                 progress = 1
                 sourceIndex = targetIndex
+            }
+            if -offsetX > scrollViewW {
+                sourceIndex = targetIndex
+                progress = 1
             }
         }
         return (sourceIndex, targetIndex, progress)
@@ -453,6 +463,7 @@ extension DYPageView {
         if source == target {
             let currentOffsetX = scrollView.contentOffset.x
             let offsetX = currentOffsetX - collectionViewStartOffsetX
+            debugPrint(offsetX)
             if offsetX >= 0 { // 左滑
                 let button = topTitleButtons[target-1]
                 button.isSelected = false
@@ -474,19 +485,18 @@ extension DYPageView {
                 topScrollUnderLine.width = targetButton.titleLabel?.width ?? targetButton.width
                 topScrollUnderLine.centerX = targetButton.centerX
             }
-            currentSelectdIndex = target
-//            debugPrint(sourceIndex,targetIndex)
-            return
+            
+            
         } else {
             if isShowUnderLine {
                 let centerX = progress * (targetButton.centerX - sourceButton.centerX) + currentUnderLineCenterX
                 let width = progress * (targetButton.titleLabel!.width - sourceButton.titleLabel!.width) + currentUnderLineWidth
                 topScrollUnderLine.width = width
                 topScrollUnderLine.centerX = centerX
-//            debugPrint(targetIndex,centerX)
             }
         }
         
+        //TODO: - 可以封装
         // 字体颜色渐变
         // 1.拿到当前选中的颜色值
         let fromRed = selectTitleColor.ws_red * 255.0
@@ -519,17 +529,6 @@ extension DYPageView {
         currentSelectdIndex = target
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     //pragma MARK: - 顶部标题scrollViewg滚动,保证每次点击的按钮在屏幕最中间
     private func topTitleScrollViewScroll(target button: UIButton) {
